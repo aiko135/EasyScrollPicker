@@ -1,11 +1,22 @@
 package ktepin.android.easyscrollpicker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ktepin.android.easyscrollpicker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding.btnSample1.setOnClickListener {
+            startActivity(Intent(this, Sample1::class.java))
+        }
+        setContentView(binding.root)
     }
+
+
 }
