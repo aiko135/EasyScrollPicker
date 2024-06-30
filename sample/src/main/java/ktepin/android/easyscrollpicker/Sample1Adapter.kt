@@ -11,7 +11,7 @@ class Sample1Adapter(
 //    private var elemWidth: Int
 ) : RecyclerView.Adapter<Sample1Adapter.SelectorViewHolder>() {
 
-    private var items: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    private var items: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17)
 
     fun getItemAtPos(pos: Int): Int = items[pos]
 
