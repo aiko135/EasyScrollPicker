@@ -3,7 +3,6 @@ package ktepin.android.easyscrollpicker
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
-import ktepin.android.easyscrollpicker.databinding.ActivityMainBinding
 import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
 
 class Sample1 : Activity() {
@@ -19,7 +18,7 @@ class Sample1 : Activity() {
         //binding.easyScrollPicker.adapter = Sample1Adapter()
 
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
-        val scrollConfig = EasyScrollConfiguration<Sample1Adapter.SelectorViewHolder, Int>(
+        val scrollConfig = EasyScrollManager<Sample1Adapter.SelectorViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context)
