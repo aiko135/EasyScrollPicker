@@ -1,11 +1,16 @@
 package ktepin.android.easyscrollpicker
 
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
+import kotlin.io.path.fileVisitor
 
 class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
     /* Required arguments */
-    easyScrollPicker: EasyScrollPicker,
+    val easyScrollPicker: EasyScrollPicker,
     onCreateViewHolder: (parent: ViewGroup) -> VH,
     onBindViewHolder: (holder: VH, item: I) -> Unit,
 
@@ -13,16 +18,31 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
     private val decorateScrolledItem: ((holder: VH, scrollPosition: ItemScrolledPos) -> Unit)? = null
 ) {
     private var adapter: EasyScrollAdapter<VH, I>? = null
+    private var itemsToAdapter: List<I>? = null
 
     init {
-        this.adapter = EasyScrollAdapter(
-            onCreateViewHolder,
-            onBindViewHolder
-        )
-        easyScrollPicker.adapter = this.adapter
+        easyScrollPicker.doOnLayout {
+            val elemWidth = it.measuredWidth / 5
+
+            this.adapter = EasyScrollAdapter(
+                onCreateViewHolder,
+                onBindViewHolder,
+                elemWidth
+            )
+            easyScrollPicker.adapter = this.adapter
+            itemsToAdapter?.let {
+                this.adapter!!.setItems(itemsToAdapter!!)
+                itemsToAdapter = null
+            }
+        }
     }
 
+
     fun setItems(items: List<I>) {
-        adapter?.setItems(items)
+         if (this.adapter == null){
+             itemsToAdapter = items
+         }else{
+             this.adapter!!.setItems(items)
+         }
     }
 }
