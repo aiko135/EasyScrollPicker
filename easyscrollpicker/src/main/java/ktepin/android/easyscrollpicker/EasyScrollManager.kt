@@ -18,8 +18,11 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
     private var onDrawCallback: (() -> Unit)? = null
 
     init {
-        easyScrollPicker.doOnLayout {
-            val elemWidth = it.measuredWidth / 5
+        //TODO maybe in onLayout inside Picker
+        easyScrollPicker.doOnLayout { easyScrollPickerView ->
+            val elemWidth = easyScrollPicker.attributes.itemsOnScreen?.let {
+                easyScrollPickerView.measuredWidth / it
+            }
 
             this.adapter = EasyScrollAdapter(
                 onCreateViewHolder,
