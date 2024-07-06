@@ -1,7 +1,10 @@
 package ktepin.android.easyscrollpicker
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
+import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +15,10 @@ class EasyScrollPicker : RecyclerView {
         var itemsOnScreen: Int? = null
     )
 
-    private val attributes = Attributes()
+    internal val attributes = Attributes()
 
     init {
+        this.clipToPadding = false
         //TODO maybe move to Manager
         layoutManager = PickerLinearManager(context, DEFAULT_ORIENTATION, DEFAULT_REVERSE_LAYOUT)
     }
@@ -56,6 +60,21 @@ class EasyScrollPicker : RecyclerView {
         this.attributes.itemsOnScreen = if (itemsOnScreen > 0) itemsOnScreen else null
 
         attrs.recycle()
+    }
+
+    override fun onDraw(c: Canvas) {
+        super.onDraw(c)
+
+        if (childCount < 1)
+            return
+
+        val firstChildWidth = getChildAt(0).measuredWidth
+        val lastItemWidth = getChildAt(childCount - 1).measuredWidth
+
+        //TODO check this formula maybe + and - use for first and last
+        val paddingLeft: Int = measuredWidth / 2 - (firstChildWidth / 2)
+        val paddingRight: Int = measuredWidth / 2 - (lastItemWidth / 2)
+        setPadding(paddingLeft, 0, paddingRight, 0)
     }
 
     companion object {
