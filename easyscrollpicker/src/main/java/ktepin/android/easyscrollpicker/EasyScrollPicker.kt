@@ -15,6 +15,7 @@ class EasyScrollPicker : RecyclerView {
     private val attributes = Attributes()
 
     init {
+        //TODO maybe move to Manager
         layoutManager = PickerLinearManager(context, DEFAULT_ORIENTATION, DEFAULT_REVERSE_LAYOUT)
     }
 
