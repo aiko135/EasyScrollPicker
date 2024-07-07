@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="easy_scroll_wrong_adapter">For Easy Scroll Picker, please inherit from its own adapter, called EasyScrollAdapter</string>
+    <string name="easy_scroll_items_on_screen_even">itemsOnScreen parameter should be an odd number. Its impossible to determine central element when even number of elements shown on screen.</string>
 </resources>

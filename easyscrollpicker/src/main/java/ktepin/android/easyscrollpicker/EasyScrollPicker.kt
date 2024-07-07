@@ -3,11 +3,9 @@ package ktepin.android.easyscrollpicker
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
-import androidx.core.view.children
-import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
 import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 
 class EasyScrollPicker : RecyclerView {
@@ -56,8 +54,14 @@ class EasyScrollPicker : RecyclerView {
             attrSet, R.styleable.EasyScrollPicker
         )
 
-        val itemsOnScreen = attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, INT_NO_VALUE)
-        this.attributes.itemsOnScreen = if (itemsOnScreen > 0) itemsOnScreen else null
+        val itemsOnScreenAttr = attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, INT_NO_VALUE)
+        val itemsOnScreen = if (itemsOnScreenAttr > 0) itemsOnScreenAttr else null
+        itemsOnScreen?.let {
+            if(it % 2 == 0)
+                throw ItemsOnScreenEvenException(context.getString(R.string.easy_scroll_items_on_screen_even))
+        }
+        this.attributes.itemsOnScreen = itemsOnScreen
+
 
         attrs.recycle()
     }

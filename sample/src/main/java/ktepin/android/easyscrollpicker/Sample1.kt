@@ -28,12 +28,13 @@ class Sample1 : Activity() {
                     .inflate(R.layout.rv_item_number, parent, false)
                 Sample1Adapter.SelectorViewHolder(view)
             },
-            onBindViewHolder = {holder, item ->
+            onBindViewHolder = { holder, item ->
                 holder.text.text = item.toString()
             }
         )
 
-       scrollPickerManager.setItems(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17))
+        val dataset = (1..100).toList()
+        scrollPickerManager.setItems(dataset)
 
 //        GlobalScope.launch {
 //            delay(5000)
