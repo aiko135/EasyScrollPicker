@@ -71,7 +71,6 @@ class EasyScrollPicker : RecyclerView {
         val firstChildWidth = getChildAt(0).measuredWidth
         val lastItemWidth = getChildAt(childCount - 1).measuredWidth
 
-        //TODO check this formula maybe + and - use for first and last
         val paddingLeft: Int = measuredWidth / 2 - (firstChildWidth / 2)
         val paddingRight: Int = measuredWidth / 2 - (lastItemWidth / 2)
         setPadding(paddingLeft, 0, paddingRight, 0)
