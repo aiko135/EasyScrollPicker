@@ -1,3 +1,4 @@
 package ktepin.android.easyscrollpicker.exception
 
-class WrongLayoutManagerException (message: String) : Exception(message)
+//TODO Check if user attaches not supported layout manager
+//class WrongLayoutManagerException (message: String) : Exception(message)

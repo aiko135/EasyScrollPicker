@@ -36,7 +36,7 @@ class EasyScrollPicker : RecyclerView {
         if (adapter is EasyScrollAdapter<*, *>) {
             super.setAdapter(adapter)
         } else {
-            throw WrongAdapterException(context.getString(R.string.easy_scroll_wrong_adapter))
+            throw WrongAdapterException(context)
         }
     }
 
@@ -58,7 +58,7 @@ class EasyScrollPicker : RecyclerView {
         val itemsOnScreen = if (itemsOnScreenAttr > 0) itemsOnScreenAttr else null
         itemsOnScreen?.let {
             if(it % 2 == 0)
-                throw ItemsOnScreenEvenException(context.getString(R.string.easy_scroll_items_on_screen_even))
+                throw ItemsOnScreenEvenException(context)
         }
         this.attributes.itemsOnScreen = itemsOnScreen
 
