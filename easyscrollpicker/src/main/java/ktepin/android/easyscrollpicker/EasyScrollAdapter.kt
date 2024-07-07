@@ -15,10 +15,10 @@ class EasyScrollAdapter<VH : ViewHolder, I>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val holder = passedOnCreateViewHolder(parent)
         elemWidthPx?.let { elemWidth ->
-            holder.itemView.rootView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 width = elemWidth
             }
-            holder.itemView.rootView.invalidate()
+//            holder.itemView.invalidate()
         }
         return holder
     }
