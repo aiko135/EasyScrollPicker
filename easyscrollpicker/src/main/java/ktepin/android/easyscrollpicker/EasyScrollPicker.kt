@@ -10,15 +10,15 @@ import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 
 class EasyScrollPicker : RecyclerView {
     class Attributes(
-        var itemsOnScreen: Int? = null
+        var itemsOnScreen: Int = DEFAULT_ITEMS_ON_SCREEN
     )
 
     internal val attributes = Attributes()
 
     init {
         this.clipToPadding = false
-        //TODO maybe move to Manager
-        layoutManager = PickerLinearManager(context, DEFAULT_ORIENTATION, DEFAULT_REVERSE_LAYOUT)
+
+        layoutManager = CustomLinearManager(context, DEFAULT_ORIENTATION, DEFAULT_REVERSE_LAYOUT)
     }
 
     constructor(context: Context) : super(context)
@@ -54,35 +54,30 @@ class EasyScrollPicker : RecyclerView {
             attrSet, R.styleable.EasyScrollPicker
         )
 
-        val itemsOnScreenAttr = attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, INT_NO_VALUE)
-        val itemsOnScreen = if (itemsOnScreenAttr > 0) itemsOnScreenAttr else null
-        itemsOnScreen?.let {
-            if(it % 2 == 0)
-                throw ItemsOnScreenEvenException(context)
-        }
+        val itemsOnScreen =
+            attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, DEFAULT_ITEMS_ON_SCREEN)
+        if (itemsOnScreen % 2 == 0)
+            throw ItemsOnScreenEvenException(context)
         this.attributes.itemsOnScreen = itemsOnScreen
-
 
         attrs.recycle()
     }
 
-    override fun onDraw(c: Canvas) {
-        super.onDraw(c)
-
-        if (childCount < 1)
-            return
-
-        val firstChildWidth = getChildAt(0).measuredWidth
-        val lastItemWidth = getChildAt(childCount - 1).measuredWidth
-
-        val paddingLeft: Int = measuredWidth / 2 - (firstChildWidth / 2)
-        val paddingRight: Int = measuredWidth / 2 - (lastItemWidth / 2)
-        setPadding(paddingLeft, 0, paddingRight, 0)
+    internal fun doAfterOnLayout(computedElemWidth: Int) {
+        val clipPadding: Int = measuredWidth / 2 - (computedElemWidth / 2)
+        setPadding(clipPadding, 0, clipPadding, 0)
     }
+
+//    internal fun scrollToInitPosition(){
+//        val adapter = adapter as EasyScrollAdapter<*, *>
+//        if(adapter.itemCount > 0){
+//           scrollTo(0, 0)
+//        }
+//    }
 
     companion object {
         private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
         private val DEFAULT_REVERSE_LAYOUT = false
-        private val INT_NO_VALUE = -1
+        private val DEFAULT_ITEMS_ON_SCREEN = 3
     }
 }

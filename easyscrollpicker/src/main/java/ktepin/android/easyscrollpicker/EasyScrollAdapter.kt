@@ -18,7 +18,6 @@ class EasyScrollAdapter<VH : ViewHolder, I>(
             holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 width = elemWidth
             }
-//            holder.itemView.invalidate()
         }
         return holder
     }
@@ -31,7 +30,7 @@ class EasyScrollAdapter<VH : ViewHolder, I>(
         }
     }
 
-    fun setItems(items: List<I>) {
+    internal fun setItems(items: List<I>) {
         this.items = items
         notifyDataSetChanged()
     }
