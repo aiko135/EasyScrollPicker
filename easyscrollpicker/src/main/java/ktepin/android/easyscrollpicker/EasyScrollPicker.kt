@@ -1,7 +1,6 @@
 package ktepin.android.easyscrollpicker
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -63,10 +62,10 @@ class EasyScrollPicker : RecyclerView {
         attrs.recycle()
     }
 
-    internal fun doAfterOnLayout(computedElemWidth: Int) {
-        val clipPadding: Int = measuredWidth / 2 - (computedElemWidth / 2)
-        setPadding(clipPadding, 0, clipPadding, 0)
-    }
+//    internal fun doOnLayoutAfterConfigured(computedElemWidth: Int) {
+//        val clipPadding = measuredWidth / 2 - (computedElemWidth / 2)
+//        setPadding(clipPadding, 0, clipPadding, 0)
+//    }
 
 //    internal fun scrollToInitPosition(){
 //        val adapter = adapter as EasyScrollAdapter<*, *>
