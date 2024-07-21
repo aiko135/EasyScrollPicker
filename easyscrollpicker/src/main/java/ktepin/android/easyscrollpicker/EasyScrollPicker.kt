@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
 import ktepin.android.easyscrollpicker.exception.WrongAdapterException
+import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
 
 class EasyScrollPicker : RecyclerView {
     class Attributes(
@@ -40,13 +41,13 @@ class EasyScrollPicker : RecyclerView {
     }
 
     //TODO check what if user would use standart LinearLayoutManager
-//    override fun setLayoutManager(lm: LayoutManager?) {
-//        if (lm is PickerLinearManager){
-//            super.setLayoutManager(lm)
-//        }else{
-//            throw WrongLayoutManagerException(context.getString(R.string.easy_scroll_wrong_adapter))
-//        }
-//    }
+    override fun setLayoutManager(lm: LayoutManager?) {
+        if (lm is CustomLinearManager) {
+            super.setLayoutManager(lm)
+        } else {
+            throw WrongLayoutManagerException(context.getString(R.string.easy_scroll_wrong_adapter))
+        }
+    }
 
     private fun applyAttributes(attrSet: AttributeSet) {
         val attrs = context.obtainStyledAttributes(
@@ -62,17 +63,18 @@ class EasyScrollPicker : RecyclerView {
         attrs.recycle()
     }
 
-//    internal fun doOnLayoutAfterConfigured(computedElemWidth: Int) {
-//        val clipPadding = measuredWidth / 2 - (computedElemWidth / 2)
-//        setPadding(clipPadding, 0, clipPadding, 0)
-//    }
+    internal fun applyInitPosition() {
+        val adapter = adapter as EasyScrollAdapter<*, *>
+        if (adapter.itemCount > 0) {
+            stopScroll()
+            scrollTo(0, 0)
+        }
+    }
 
-//    internal fun scrollToInitPosition(){
-//        val adapter = adapter as EasyScrollAdapter<*, *>
-//        if(adapter.itemCount > 0){
-//           scrollTo(0, 0)
-//        }
-//    }
+    internal fun measurePadding(elemWidth: Int) {
+        val clipPadding: Int = measuredWidth / 2 - (elemWidth / 2)
+        setPadding(clipPadding, 0, clipPadding, 0)
+    }
 
     companion object {
         private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL

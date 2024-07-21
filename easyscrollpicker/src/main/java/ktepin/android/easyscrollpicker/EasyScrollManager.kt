@@ -12,6 +12,7 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
     onBindViewHolder: (holder: VH, item: I) -> Unit,
 
     /* Optional arguments */
+    private val onItemSelected: ((item:I)->Unit)? = null,
     private val decorateScrolledItem: ((holder: VH, scrollPosition: ItemScrolledPos) -> Unit)? = null
 ) {
     private var adapter: EasyScrollAdapter<VH, I>? = null
@@ -29,6 +30,7 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
                 onBindViewHolder,
                 elemWidth
             )
+
             easyScrollPicker.adapter = this.adapter
 
             easyScrollPicker.doOnPreDraw {
@@ -38,19 +40,20 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
                 }
             }
 
-            val clipPadding:Int = easyScrollPicker.measuredWidth / 2 - (elemWidth / 2)
-            easyScrollPicker.setPadding(clipPadding, 0, clipPadding, 0)
-//            easyScrollPicker.doOnLayoutAfterConfigured(elemWidth)
+            easyScrollPicker.measurePadding(elemWidth)
         }
     }
 
     fun setItems(items: List<I>) {
+        val setItemsCb = {
+            adapter!!.setItems(items)
+            easyScrollPicker.applyInitPosition()
+        }
+
         adapter?.let {
-            setItems(items)
+            setItemsCb.invoke()
         } ?: run {
-            setItemsCallback = {
-                adapter!!.setItems(items)
-            }
+            setItemsCallback = setItemsCb
         }
     }
 }
