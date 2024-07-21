@@ -17,8 +17,6 @@ class EasyScrollPicker : RecyclerView {
 
     init {
         this.clipToPadding = false
-
-        layoutManager = CustomLinearManager(context, DEFAULT_ORIENTATION, DEFAULT_REVERSE_LAYOUT)
     }
 
     constructor(context: Context) : super(context)
@@ -42,7 +40,7 @@ class EasyScrollPicker : RecyclerView {
 
     //TODO check what if user would use standart LinearLayoutManager
     override fun setLayoutManager(lm: LayoutManager?) {
-        if (lm is CustomLinearManager) {
+        if (lm is CustomLayoutManager<*>) {
             super.setLayoutManager(lm)
         } else {
             throw WrongLayoutManagerException(context.getString(R.string.easy_scroll_wrong_adapter))
@@ -74,6 +72,17 @@ class EasyScrollPicker : RecyclerView {
     internal fun measurePadding(elemWidth: Int) {
         val clipPadding: Int = measuredWidth / 2 - (elemWidth / 2)
         setPadding(clipPadding, 0, clipPadding, 0)
+    }
+
+    internal fun <I> configureLayoutManager(
+        onItemSelect: ((item:I)->Unit)?
+    ){
+        layoutManager = CustomLayoutManager<I>(
+            this,
+            DEFAULT_ORIENTATION,
+            DEFAULT_REVERSE_LAYOUT,
+            onItemSelect
+        )
     }
 
     companion object {

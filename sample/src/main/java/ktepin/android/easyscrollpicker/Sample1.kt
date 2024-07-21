@@ -2,6 +2,7 @@ package ktepin.android.easyscrollpicker
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -40,6 +41,9 @@ class Sample1 : Activity() {
             },
             onBindViewHolder = { holder, item ->
                 holder.text.text = item.toString()
+            },
+            onItemSelected = {
+                Log.d("test", "Selected $it")
             }
         )
 

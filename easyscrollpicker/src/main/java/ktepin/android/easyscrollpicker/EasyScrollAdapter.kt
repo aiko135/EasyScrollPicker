@@ -34,4 +34,6 @@ class EasyScrollAdapter<VH : ViewHolder, I>(
         this.items = items
         notifyDataSetChanged()
     }
+
+    internal fun getItemAtPos(pos:Int):I? = items?.getOrNull(pos)
 }
