@@ -2,7 +2,7 @@ package ktepin.android.easyscrollpicker
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
@@ -10,13 +10,12 @@ import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
 
 class EasyScrollPicker : RecyclerView {
-    class Attributes(
-        var itemsOnScreen: Int = DEFAULT_ITEMS_ON_SCREEN
-    )
+    private var callbacks: EasyScrollCallbacks<*, *>? = null
+    private var setItemsCallback: (() -> Unit)? = null
 
-    internal var requiredElemWidth = 0
-    private val attributes = Attributes()
-    private var initialPos = 0
+    private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
+    private var requiredElemWidth = 0
+    internal var initialPos = 0
 
     init {
         this.clipToPadding = false
@@ -43,7 +42,7 @@ class EasyScrollPicker : RecyclerView {
             attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, DEFAULT_ITEMS_ON_SCREEN)
         if (itemsOnScreen % 2 == 0)
             throw ItemsOnScreenEvenException(context)
-        this.attributes.itemsOnScreen = itemsOnScreen
+        this.numOfItemsOnScreen = itemsOnScreen
 
         attrs.recycle()
     }
@@ -56,7 +55,7 @@ class EasyScrollPicker : RecyclerView {
         }
     }
 
-    override fun getAdapter(): EasyScrollAdapter<*, *> = super.getAdapter() as EasyScrollAdapter<*, *>
+    override fun getAdapter(): EasyScrollAdapter<*, *>? = super.getAdapter() as EasyScrollAdapter<*, *>?
 
     override fun setLayoutManager(lm: LayoutManager?) {
         if (lm is CustomLayoutManager<*>) {
@@ -66,40 +65,75 @@ class EasyScrollPicker : RecyclerView {
         }
     }
 
-    internal fun <VH : ViewHolder, I> init(
-        onCreateViewHolder: (parent: ViewGroup) -> VH,
-        onBindViewHolder: (holder: VH, item: I) -> Unit,
-        onItemSelect: ((item: I) -> Unit)?
+    internal fun <VH : ViewHolder, I> configure(
+        easyScrollCallbacks: EasyScrollCallbacks<VH, I>
     ) {
-        adapter = EasyScrollAdapter(
-            onCreateViewHolder,
-            onBindViewHolder
-        )
-        layoutManager = CustomLayoutManager<I>(
-            this,
-            DEFAULT_ORIENTATION,
-            DEFAULT_REVERSE_LAYOUT,
-            onItemSelect
-        )
-    }
-
-    internal fun applyInitPosition() {
-        if (adapter.itemCount > 0) {
-            stopScroll()
-            scrollTo(0, 0)
+        callbacks = easyScrollCallbacks.also{
+            adapter = EasyScrollAdapter(
+                it.onCreateViewHolder,
+                it.onBindViewHolder
+            )
+            layoutManager = CustomLayoutManager<I>(
+                this,
+                DEFAULT_ORIENTATION,
+                DEFAULT_REVERSE_LAYOUT,
+                it.onItemSelect
+            )
         }
     }
 
-    internal fun measureElemWidth() {
-        requiredElemWidth = attributes.itemsOnScreen.let {
-            this.measuredWidth / it
-        }
-    }
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed, l, t, r, b)
 
-    internal fun measureAndApplyPadding() {
+        requiredElemWidth = measuredWidth / numOfItemsOnScreen
+
+        adapter?.let {
+            it.elemWidthPx = requiredElemWidth
+        }
+
         val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
         setPadding(clipPadding, 0, clipPadding, 0)
+
+        adapter = adapter // fore trigger to redraw all elements of RV
+        this.smoothScrollToPosition(0)
+
+        doOnPreDraw {
+            //postponed setItems operation
+            setItemsCallback?.let { cb ->
+                cb.invoke()
+                setItemsCallback = null
+            }
+        }
     }
+
+    internal fun setItems(items: List<*>) {
+        val setItemsCb:()->Unit = {
+            adapter?.setItems(items as List<Nothing>)
+            applyInitPosition()
+        }
+
+        adapter?.let {
+            setItemsCb.invoke()
+        } ?: run {
+            setItemsCallback = setItemsCb
+        }
+    }
+
+    private fun applyInitPosition() {
+        adapter?.let {
+            var scrollPx = 0
+
+            if (it.itemCount > 0) {
+                if (initialPos <= (it.itemCount - 1)){
+                    scrollPx = paddingStart + initialPos * requiredElemWidth
+                }
+            }
+
+            stopScroll()
+            scrollTo(scrollPx, 0)
+        }
+    }
+
 
     companion object {
         private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
