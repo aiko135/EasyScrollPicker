@@ -1,3 +1,9 @@
 package ktepin.android.easyscrollpicker.exception
 
-class WrongLayoutManagerException (message: String) : Exception(message)
+import android.content.Context
+import ktepin.android.easyscrollpicker.R
+
+class WrongLayoutManagerException (context:Context) : AbstractException(
+    context,
+    R.string.easy_scroll_wrong_lm
+)

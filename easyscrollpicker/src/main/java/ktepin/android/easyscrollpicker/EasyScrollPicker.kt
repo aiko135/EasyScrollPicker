@@ -2,6 +2,7 @@ package ktepin.android.easyscrollpicker
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
@@ -13,13 +14,16 @@ class EasyScrollPicker : RecyclerView {
         var itemsOnScreen: Int = DEFAULT_ITEMS_ON_SCREEN
     )
 
-    internal val attributes = Attributes()
+    internal var requiredElemWidth = 0
+    private val attributes = Attributes()
+    private var initialPos = 0
 
     init {
         this.clipToPadding = false
     }
 
     constructor(context: Context) : super(context)
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         attrs?.let { applyAttributes(it) }
     }
@@ -28,23 +32,6 @@ class EasyScrollPicker : RecyclerView {
         context, attrs, defStyleAttr
     ) {
         attrs?.let { applyAttributes(it) }
-    }
-
-    override fun setAdapter(adapter: Adapter<*>?) {
-        if (adapter is EasyScrollAdapter<*, *>) {
-            super.setAdapter(adapter)
-        } else {
-            throw WrongAdapterException(context)
-        }
-    }
-
-    //TODO check what if user would use standart LinearLayoutManager
-    override fun setLayoutManager(lm: LayoutManager?) {
-        if (lm is CustomLayoutManager<*>) {
-            super.setLayoutManager(lm)
-        } else {
-            throw WrongLayoutManagerException(context.getString(R.string.easy_scroll_wrong_adapter))
-        }
     }
 
     private fun applyAttributes(attrSet: AttributeSet) {
@@ -61,28 +48,57 @@ class EasyScrollPicker : RecyclerView {
         attrs.recycle()
     }
 
-    internal fun applyInitPosition() {
-        val adapter = adapter as EasyScrollAdapter<*, *>
-        if (adapter.itemCount > 0) {
-            stopScroll()
-            scrollTo(0, 0)
+    override fun setAdapter(adapter: Adapter<*>?) {
+        if (adapter is EasyScrollAdapter<*, *>) {
+            super.setAdapter(adapter)
+        } else {
+            throw WrongAdapterException(context)
         }
     }
 
-    internal fun measurePadding(elemWidth: Int) {
-        val clipPadding: Int = measuredWidth / 2 - (elemWidth / 2)
-        setPadding(clipPadding, 0, clipPadding, 0)
+    override fun getAdapter(): EasyScrollAdapter<*, *> = super.getAdapter() as EasyScrollAdapter<*, *>
+
+    override fun setLayoutManager(lm: LayoutManager?) {
+        if (lm is CustomLayoutManager<*>) {
+            super.setLayoutManager(lm)
+        } else {
+            throw WrongLayoutManagerException(context)
+        }
     }
 
-    internal fun <I> configureLayoutManager(
-        onItemSelect: ((item:I)->Unit)?
-    ){
+    internal fun <VH : ViewHolder, I> init(
+        onCreateViewHolder: (parent: ViewGroup) -> VH,
+        onBindViewHolder: (holder: VH, item: I) -> Unit,
+        onItemSelect: ((item: I) -> Unit)?
+    ) {
+        adapter = EasyScrollAdapter(
+            onCreateViewHolder,
+            onBindViewHolder
+        )
         layoutManager = CustomLayoutManager<I>(
             this,
             DEFAULT_ORIENTATION,
             DEFAULT_REVERSE_LAYOUT,
             onItemSelect
         )
+    }
+
+    internal fun applyInitPosition() {
+        if (adapter.itemCount > 0) {
+            stopScroll()
+            scrollTo(0, 0)
+        }
+    }
+
+    internal fun measureElemWidth() {
+        requiredElemWidth = attributes.itemsOnScreen.let {
+            this.measuredWidth / it
+        }
+    }
+
+    internal fun measureAndApplyPadding() {
+        val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
+        setPadding(clipPadding, 0, clipPadding, 0)
     }
 
     companion object {

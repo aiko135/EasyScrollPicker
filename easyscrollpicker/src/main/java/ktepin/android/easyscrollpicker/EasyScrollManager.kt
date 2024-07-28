@@ -1,6 +1,7 @@
 package ktepin.android.easyscrollpicker
 
 import android.view.ViewGroup
+import androidx.core.view.doOnAttach
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
@@ -17,26 +18,25 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
     onBindViewHolder: (holder: VH, item: I) -> Unit,
 
     /* Optional arguments */
-    private val onItemSelected: ((item:I)->Unit)? = null,
+    private val onItemSelect: ((item: I) -> Unit)? = null,
     private val decorateViewHolderAtPos: ((holder: VH, scrollPosition: ViewHolderPos) -> Unit)? = null
 ) {
     private var adapter: EasyScrollAdapter<VH, I>? = null
     private var setItemsCallback: (() -> Unit)? = null
 
     init {
-        easyScrollPicker.doOnLayout { easyScrollPickerView ->
-            //essential value - computed elem size
-            val elemWidth = easyScrollPicker.attributes.itemsOnScreen.let {
-                easyScrollPickerView.measuredWidth / it
-            }
-
-            this.adapter = EasyScrollAdapter(
-                onCreateViewHolder,
-                onBindViewHolder,
-                elemWidth
+        easyScrollPicker.doOnAttach {
+            easyScrollPicker.init(
+                onCreateViewHolder = onCreateViewHolder,
+                onBindViewHolder = onBindViewHolder,
+                onItemSelect = onItemSelect
             )
-            easyScrollPicker.adapter = this.adapter
-            easyScrollPicker.configureLayoutManager(onItemSelected)
+        }
+
+        easyScrollPicker.doOnLayout {
+            //essential action - compute each elem size (Width)
+            easyScrollPicker.measureElemWidth()
+            easyScrollPicker.adapter.elemWidthPx = easyScrollPicker.requiredElemWidth
 
             easyScrollPicker.doOnPreDraw {
                 setItemsCallback?.let { cb ->
@@ -44,14 +44,17 @@ class EasyScrollManager<in VH : RecyclerView.ViewHolder, in I>(
                     setItemsCallback = null
                 }
             }
-
-            easyScrollPicker.measurePadding(elemWidth)
+            easyScrollPicker.measureAndApplyPadding()
         }
+    }
+
+    fun setDefaultPosition(position: Int) {
+
     }
 
     fun setItems(items: List<I>) {
         val setItemsCb = {
-            adapter!!.setItems(items)
+            easyScrollPicker.adapter.setItems(items as List<Nothing>)
             easyScrollPicker.applyInitPosition()
         }
 

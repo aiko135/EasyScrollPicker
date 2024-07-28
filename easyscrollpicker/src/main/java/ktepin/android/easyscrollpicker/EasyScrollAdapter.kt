@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 class EasyScrollAdapter<VH : ViewHolder, I>(
     private val passedOnCreateViewHolder: (parent: ViewGroup) -> VH,
     private val passedOnBindViewHolder: (holder: VH, item: I) -> Unit,
-    private var elemWidthPx: Int? = null
+    internal var elemWidthPx: Int? = null
 ) : RecyclerView.Adapter<VH>() {
     private var items: List<I>? = null
 

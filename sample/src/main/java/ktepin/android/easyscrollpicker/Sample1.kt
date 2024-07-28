@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
 
 class Sample1 : Activity() {
@@ -30,7 +27,7 @@ class Sample1 : Activity() {
 
         //wrong
         //binding.easyScrollPicker.adapter = Sample1Adapter()
-
+        //--- TODO TEST IN FRAGMENT ---
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
         val scrollPickerManager = EasyScrollManager<SelectorViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
@@ -42,7 +39,7 @@ class Sample1 : Activity() {
             onBindViewHolder = { holder, item ->
                 holder.text.text = item.toString()
             },
-            onItemSelected = {
+            onItemSelect = {
                 Log.d("test", "Selected $it")
             }
         )
