@@ -9,9 +9,6 @@ import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
 
 class EasyScrollPicker : RecyclerView {
-    enum class UiSate{
-        NOT_INITIALIZED, APPLY_INIT_POS, DONT_APPLY_INIT_POS
-    }
 
     private var callbacks: EasyScrollCallbacks<*, *>? = null
     private var setItemsCallback: (() -> Unit)? = null
@@ -19,7 +16,6 @@ class EasyScrollPicker : RecyclerView {
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
-    private var state = UiSate.NOT_INITIALIZED
 
     init {
         this.clipToPadding = false
@@ -97,57 +93,13 @@ class EasyScrollPicker : RecyclerView {
 
         val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
         setPadding(clipPadding, 0, clipPadding, 0)
-
-        //some little state machine
-        when(state){
-            UiSate.NOT_INITIALIZED -> {
-                setItemsCallback?.let { cb ->
-                    setItemsCallback = null
-                    cb.invoke()
-                } ?: run {
-                    state = UiSate.DONT_APPLY_INIT_POS
-                }
-            }
-
-            UiSate.APPLY_INIT_POS -> {
-                post {
-                    this.scrollToPosition(initialPos)
-                }
-                state = UiSate.DONT_APPLY_INIT_POS
-            }
-
-            UiSate.DONT_APPLY_INIT_POS -> {}
-        }
     }
 
     internal fun setItems(items: List<*>) {
-//        adapter?.setItems(items as List<Nothing>)
-//        shouldApplyInitPos = true
-//        requestLayout()
-//        doOnNextLayout {
-//
-//            requestLayout()
-//        }
-//        viewTreeObserver.addOnGlobalLayoutListener(object :
-//            ViewTreeObserver.OnGlobalLayoutListener {
-//            override fun onGlobalLayout() {
-//
-//                viewTreeObserver.removeOnGlobalLayoutListener(this)
-//            }
-//
-//        })
-
-        val setItemsCb:()->Unit = {
-           post{
-               adapter?.setItems(items as List<Nothing>)
-               state = UiSate.APPLY_INIT_POS
-           }
-        }
-
-        if (state == UiSate.NOT_INITIALIZED || adapter == null ){
-            setItemsCallback = setItemsCb
-        }else{
-            setItemsCb.invoke()
+        post{
+            adapter?.setItems(items as List<Nothing>)
+            stopScroll()
+            scrollToPosition(initialPos)
         }
     }
 
@@ -164,9 +116,6 @@ class EasyScrollPicker : RecyclerView {
 //            }
 //        }
 //    }
-
-
-    private fun isMeasured():Boolean = this.width > 0 && this.height > 0
 
     companion object {
         private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
