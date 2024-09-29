@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "EasyScrollPicker"
 include(":sample")
-include(":easyscrollpicker")
+include(":lib")
