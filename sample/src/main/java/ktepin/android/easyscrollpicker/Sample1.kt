@@ -17,7 +17,7 @@ class Sample1 : Activity() {
         ActivitySample1Binding.inflate(layoutInflater)
     }
 
-    class SelectorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val text: TextView
 
         init {
@@ -32,12 +32,11 @@ class Sample1 : Activity() {
         //binding.easyScrollPicker.adapter = Sample1Adapter()
         //--- TODO TEST IN FRAGMENT ---
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
-        val scrollPickerManager = EasyScrollManager<SelectorViewHolder, Int>(
+        val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.rv_item_number, parent, false)
-                SelectorViewHolder(view)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_number, parent, false)
+                ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
                 holder.text.text = item.toString()
@@ -52,7 +51,7 @@ class Sample1 : Activity() {
         scrollPickerManager.setItems(dataset)
 
 //        GlobalScope.launch {
-//            delay(2000)
+//            delay(5000)
 //            runOnUiThread {
 //                scrollPickerManager.setInitialPosition(4)
 //                scrollPickerManager.setItems(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17))
