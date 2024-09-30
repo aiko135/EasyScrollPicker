@@ -103,20 +103,6 @@ class EasyScrollPicker : RecyclerView {
         }
     }
 
-//    private fun requestApplyInitPosition() {
-//        shouldApplyInitPos = true
-//        requestLayout()
-//        adapter?.let {
-//            var scrollPx = 0
-//
-//            if (it.itemCount > 0) {
-//                if (initialPos <= (it.itemCount - 1)){
-//                    scrollPx = paddingStart + initialPos * requiredElemWidth
-//                }
-//            }
-//        }
-//    }
-
     companion object {
         private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
         private val DEFAULT_REVERSE_LAYOUT = false

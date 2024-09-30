@@ -46,9 +46,9 @@ class Sample1 : Activity() {
             }
         )
 
-        val dataset = (1..100).toList()
-        scrollPickerManager.setInitialPosition(4)
-        scrollPickerManager.setItems(dataset)
+//        val dataset = (1..100).toList()
+//        scrollPickerManager.setInitialPosition(0)
+//        scrollPickerManager.setItems(dataset)
 
         GlobalScope.launch {
             delay(5000)
