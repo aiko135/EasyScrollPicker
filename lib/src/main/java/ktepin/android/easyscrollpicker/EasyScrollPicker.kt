@@ -16,9 +16,11 @@ class EasyScrollPicker : RecyclerView {
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
     private var selectDelay = DEFAULT_SELECT_DELAY_MS
+    private var enableMagneticFinisher = DEFAULT_ENABLE_MAGNETIC_FINISHER
 
     init {
         this.clipToPadding = false
+
     }
 
     constructor(context: Context) : super(context)
@@ -69,7 +71,7 @@ class EasyScrollPicker : RecyclerView {
     }
 
     internal fun <VH : ViewHolder, I> configure(
-        easyScrollCallbacks: EasyScrollCallbacks<VH, I>
+        easyScrollCallbacks: EasyScrollCallbacks<VH, I>,
     ) {
         callbacks = easyScrollCallbacks.also{
             adapter = EasyScrollAdapter(
@@ -80,6 +82,7 @@ class EasyScrollPicker : RecyclerView {
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
+                enableMagneticFinisher = enableMagneticFinisher,
                 onItemSelect = it.onItemSelect,
                 selectDelay = selectDelay.toLong(),
                 onItemChangeRelativePos =
@@ -121,6 +124,7 @@ class EasyScrollPicker : RecyclerView {
         private const val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
         private const val DEFAULT_REVERSE_LAYOUT = false
         private const val DEFAULT_SELECT_DELAY_MS = 0
+        private const val DEFAULT_ENABLE_MAGNETIC_FINISHER = false
         private const val DEFAULT_ITEMS_ON_SCREEN = 3
         private const val DEFAULT_INIT_POS = 0
     }

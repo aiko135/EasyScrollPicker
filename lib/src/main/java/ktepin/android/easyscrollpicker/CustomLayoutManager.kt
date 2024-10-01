@@ -1,8 +1,13 @@
 package ktepin.android.easyscrollpicker
 
+import android.content.Context
+import android.graphics.PointF
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import androidx.recyclerview.widget.SnapHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -10,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.abs
+
 
 /**
  * inspired by
@@ -19,9 +25,10 @@ class CustomLayoutManager<I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,
+    private val enableMagneticFinisher: Boolean,
     private val selectDelay: Long,
-    private val onItemSelect: ((item:I)->Unit)?,
-    private val onItemChangeRelativePos: ((View:View, relativePos:Int)->Unit)?
+    private val onItemSelect: ((item: I) -> Unit)?,
+    private val onItemChangeRelativePos: ((View: View, relativePos: Int) -> Unit)?,
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
     private val viewMap = mutableMapOf<View, Int>()
     private var waitJob: Job? = null
@@ -38,7 +45,7 @@ class CustomLayoutManager<I>(
     override fun scrollHorizontallyBy(
         dx: Int,
         recycler: RecyclerView.Recycler?,
-        state: RecyclerView.State?
+        state: RecyclerView.State?,
     ): Int {
         val orientation = orientation
         return if (orientation == HORIZONTAL) {

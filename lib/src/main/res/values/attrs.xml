@@ -3,5 +3,7 @@
     <declare-styleable name="EasyScrollPicker">
         <attr name="itemsOnScreen" format="integer"/>
         <attr name="selectDelayMs" format="integer"/>
+        <attr name="enableMagneticFinisher" format="boolean"/>
+        <attr name="magneticFinisherVelocity" format="integer"/>
     </declare-styleable>
 </resources>
