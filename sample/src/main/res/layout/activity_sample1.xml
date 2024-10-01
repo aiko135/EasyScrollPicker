@@ -20,7 +20,7 @@
              android:id="@+id/easyScrollPicker"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             app:itemsOnScreen="7"
+             app:itemsOnScreen="3"
              tools:listitem="@layout/rv_item_number"/>
 
     </LinearLayout>

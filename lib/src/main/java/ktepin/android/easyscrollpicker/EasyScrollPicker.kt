@@ -11,7 +11,6 @@ import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
 class EasyScrollPicker : RecyclerView {
 
     private var callbacks: EasyScrollCallbacks<*, *>? = null
-    private var setItemsCallback: (() -> Unit)? = null
 
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
     private var requiredElemWidth = 0
@@ -77,7 +76,13 @@ class EasyScrollPicker : RecyclerView {
                 this,
                 DEFAULT_ORIENTATION,
                 DEFAULT_REVERSE_LAYOUT,
-                it.onItemSelect
+                it.onItemSelect,
+                it.decorateViewHolderAtPos?.let {{ untypedView, relativePos ->
+                    easyScrollCallbacks.decorateViewHolderAtPos!!.invoke(
+                        getChildViewHolder(untypedView) as VH,
+                        relativePos
+                    )
+                }}
             )
         }
     }

@@ -13,15 +13,19 @@ class CustomLayoutManager<I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,
-    private val onItemSelect: ((item:I)->Unit)?
+    private val onItemSelect: ((item:I)->Unit)?,
+    private val onItemChangeRelativePos: ((View:View, relativePos:Int)->Unit)?
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
 
+    private val viewMap = mutableMapOf<View, Int>()
     private val adapter = easyScrollPicker.adapter as EasyScrollAdapter<*,I>
     private var lastSelectedPos = -1
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         super.onLayoutChildren(recycler, state)
-        onChange()
+        onItemChangeRelativePos?.let {
+            observeOnChange()
+        }
     }
 
     override fun scrollHorizontallyBy(
@@ -32,14 +36,16 @@ class CustomLayoutManager<I>(
         val orientation = orientation
         return if (orientation == HORIZONTAL) {
             val scrolled = super.scrollHorizontallyBy(dx, recycler, state)
-            onChange()
+            onItemChangeRelativePos?.let {
+                observeOnChange()
+            }
             scrolled
         } else {
             0
         }
     }
 
-    private fun onChange() {
+    private fun observeOnChange() {
         val mid = width / 2.0f
         val elemWidth = getChildAt(0)?.width
             ?: return //all containers have the same width, so we can take the width of the first one
@@ -58,16 +64,37 @@ class CustomLayoutManager<I>(
                         select(child)
                     }
 
-//                    applyVisual(child, ElemPos.CENTRAL)
-//                    getChildAt(i - 1)?.let { applyVisual(it, ElemPos.LEFT_NEIGHBOR) }
-//                    getChildAt(i + 1)?.let { applyVisual(it, ElemPos.RIGHT_NEIGHBOR) }
-                    i++ //скипаем i+1 элемент
-                } else {
-//                    applyVisual(child, ElemPos.REST)
+                    for (j in -i..-1)
+                        checkIfItemPosChanged(getChildAt(i+j), j) //LEFT ITEMS
+
+                    checkIfItemPosChanged(child, 0) //CENTRAL ITEM
+
+                    for (k in 1..childCount)
+                        checkIfItemPosChanged(getChildAt(i+k), k) //RIGHT ITEMS
+
+                    i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
                 }
             }
             i++
         }
+    }
+
+    private fun checkIfItemPosChanged(view:View?, relativePos:Int){
+        view?.let { v ->
+            if (viewMap.size > VIEW_MAP_LIMIT)
+                viewMap.clear()
+
+            viewMap[v]?.let {
+                if (it != relativePos){
+                    viewMap[v] = relativePos
+                    onItemChangeRelativePos?.invoke(v, relativePos)
+                }
+            } ?:run {
+                viewMap[v] = relativePos
+                onItemChangeRelativePos?.invoke(v, relativePos)
+            }
+        }
+
     }
 
     private fun select(elem: View){
@@ -79,5 +106,9 @@ class CustomLayoutManager<I>(
             lastSelectedPos = adapterPos
         }
 
+    }
+
+    companion object{
+        private const val VIEW_MAP_LIMIT = 100
     }
 }

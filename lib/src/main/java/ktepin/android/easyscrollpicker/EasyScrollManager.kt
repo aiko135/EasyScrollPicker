@@ -18,7 +18,7 @@ class EasyScrollManager<VH : RecyclerView.ViewHolder, I>(
 
     /* Optional arguments */
     onItemSelect: ((item: I) -> Unit)? = null,
-    decorateViewHolderAtPos: ((holder: VH, scrollPosition: ViewHolderPos) -> Unit)? = null
+    decorateViewHolderAtPos: ((holder: VH, relativePos: Int) -> Unit)? = null
 ) {
     init {
         easyScrollPicker.configure(
