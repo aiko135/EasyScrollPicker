@@ -22,6 +22,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              app:itemsOnScreen="3"
+             app:enableSnapFinisher="true"
              app:selectDelayMs="400"
              tools:listitem="@layout/rv_item_number"/>
 

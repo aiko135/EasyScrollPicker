@@ -2,8 +2,11 @@ package ktepin.android.easyscrollpicker
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
 import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
@@ -16,11 +19,11 @@ class EasyScrollPicker : RecyclerView {
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
     private var selectDelay = DEFAULT_SELECT_DELAY_MS
-    private var enableMagneticFinisher = DEFAULT_ENABLE_MAGNETIC_FINISHER
+    private var enableSnapFinisher = DEFAULT_ENABLE_SNAP
+    private var snapHelper: SnapHelper? = null
 
     init {
         this.clipToPadding = false
-
     }
 
     constructor(context: Context) : super(context)
@@ -48,6 +51,12 @@ class EasyScrollPicker : RecyclerView {
         val selectDelayAttr = attrs.getInt(R.styleable.EasyScrollPicker_selectDelayMs, DEFAULT_SELECT_DELAY_MS)
         if (selectDelayAttr >= 0)
             this.selectDelay = selectDelayAttr
+
+        val enableSnap = attrs.getBoolean(R.styleable.EasyScrollPicker_enableSnapFinisher, DEFAULT_ENABLE_SNAP)
+        if (enableSnap){
+            snapHelper = LinearSnapHelper()
+            snapHelper?.attachToRecyclerView(this)
+        }
 
         attrs.recycle()
     }
@@ -82,7 +91,7 @@ class EasyScrollPicker : RecyclerView {
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
-                enableMagneticFinisher = enableMagneticFinisher,
+                enableMagneticFinisher = enableSnapFinisher,
                 onItemSelect = it.onItemSelect,
                 selectDelay = selectDelay.toLong(),
                 onItemChangeRelativePos =
@@ -120,11 +129,18 @@ class EasyScrollPicker : RecyclerView {
         }
     }
 
+    fun replaceItemDecoration(decoration: DividerItemDecoration){
+        while (this.itemDecorationCount > 0) {
+            this.removeItemDecorationAt(0)
+        }
+        this.addItemDecoration(decoration)
+    }
+
     companion object {
         private const val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
         private const val DEFAULT_REVERSE_LAYOUT = false
         private const val DEFAULT_SELECT_DELAY_MS = 0
-        private const val DEFAULT_ENABLE_MAGNETIC_FINISHER = false
+        private const val DEFAULT_ENABLE_SNAP = false
         private const val DEFAULT_ITEMS_ON_SCREEN = 3
         private const val DEFAULT_INIT_POS = 0
     }
