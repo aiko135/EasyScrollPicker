@@ -15,6 +15,7 @@ class EasyScrollPicker : RecyclerView {
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
+    private var invokeSelectCallbackOnInit = DEFAULT_INVOKE_ONSELECT_WHEN_INIT
 
     init {
         this.clipToPadding = false
@@ -37,8 +38,7 @@ class EasyScrollPicker : RecyclerView {
             attrSet, R.styleable.EasyScrollPicker
         )
 
-        val itemsOnScreen =
-            attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, DEFAULT_ITEMS_ON_SCREEN)
+        val itemsOnScreen = attrs.getInt(R.styleable.EasyScrollPicker_itemsOnScreen, DEFAULT_ITEMS_ON_SCREEN)
         if (itemsOnScreen % 2 == 0)
             throw ItemsOnScreenEvenException(context)
         this.numOfItemsOnScreen = itemsOnScreen
@@ -73,16 +73,17 @@ class EasyScrollPicker : RecyclerView {
                 it.onBindViewHolder
             )
             layoutManager = CustomLayoutManager<I>(
-                this,
-                DEFAULT_ORIENTATION,
-                DEFAULT_REVERSE_LAYOUT,
-                it.onItemSelect,
-                it.decorateViewHolderAtPos?.let {{ untypedView, relativePos ->
-                    easyScrollCallbacks.decorateViewHolderAtPos!!.invoke(
-                        getChildViewHolder(untypedView) as VH,
-                        relativePos
-                    )
-                }}
+                easyScrollPicker = this,
+                orientation = DEFAULT_ORIENTATION,
+                reverseLayout = DEFAULT_REVERSE_LAYOUT,
+                onItemSelect = it.onItemSelect,
+                onItemChangeRelativePos =
+                    it.decorateViewHolderAtPos?.let {{ untypedView, relativePos ->
+                        easyScrollCallbacks.decorateViewHolderAtPos!!.invoke(
+                            getChildViewHolder(untypedView) as VH,
+                            relativePos
+                        )
+                    }}
             )
         }
     }
@@ -101,6 +102,9 @@ class EasyScrollPicker : RecyclerView {
     }
 
     internal fun setItems(items: List<*>) {
+        if (initialPos > items.lastIndex)
+            return //Index out of bounds
+
         post{
             adapter?.setItems(items as List<Nothing>)
             stopScroll()
@@ -109,9 +113,10 @@ class EasyScrollPicker : RecyclerView {
     }
 
     companion object {
-        private val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
-        private val DEFAULT_REVERSE_LAYOUT = false
-        private val DEFAULT_ITEMS_ON_SCREEN = 3
-        private val DEFAULT_INIT_POS = 0
+        private const val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
+        private const val DEFAULT_REVERSE_LAYOUT = false
+        private const val DEFAULT_INVOKE_ONSELECT_WHEN_INIT = false
+        private const val DEFAULT_ITEMS_ON_SCREEN = 3
+        private const val DEFAULT_INIT_POS = 0
     }
 }
