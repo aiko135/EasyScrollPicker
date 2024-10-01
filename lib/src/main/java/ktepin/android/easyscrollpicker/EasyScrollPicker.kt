@@ -15,7 +15,7 @@ class EasyScrollPicker : RecyclerView {
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
-    private var invokeSelectCallbackOnInit = DEFAULT_INVOKE_ONSELECT_WHEN_INIT
+    private var selectDelay = DEFAULT_SELECT_DELAY_MS
 
     init {
         this.clipToPadding = false
@@ -42,6 +42,10 @@ class EasyScrollPicker : RecyclerView {
         if (itemsOnScreen % 2 == 0)
             throw ItemsOnScreenEvenException(context)
         this.numOfItemsOnScreen = itemsOnScreen
+
+        val selectDelayAttr = attrs.getInt(R.styleable.EasyScrollPicker_selectDelayMs, DEFAULT_SELECT_DELAY_MS)
+        if (selectDelayAttr >= 0)
+            this.selectDelay = selectDelayAttr
 
         attrs.recycle()
     }
@@ -77,6 +81,7 @@ class EasyScrollPicker : RecyclerView {
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
                 onItemSelect = it.onItemSelect,
+                selectDelay = selectDelay.toLong(),
                 onItemChangeRelativePos =
                     it.decorateViewHolderAtPos?.let {{ untypedView, relativePos ->
                         easyScrollCallbacks.decorateViewHolderAtPos!!.invoke(
@@ -115,7 +120,7 @@ class EasyScrollPicker : RecyclerView {
     companion object {
         private const val DEFAULT_ORIENTATION = LinearLayoutManager.HORIZONTAL
         private const val DEFAULT_REVERSE_LAYOUT = false
-        private const val DEFAULT_INVOKE_ONSELECT_WHEN_INIT = false
+        private const val DEFAULT_SELECT_DELAY_MS = 0
         private const val DEFAULT_ITEMS_ON_SCREEN = 3
         private const val DEFAULT_INIT_POS = 0
     }

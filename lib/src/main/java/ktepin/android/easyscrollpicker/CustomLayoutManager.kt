@@ -3,6 +3,12 @@ package ktepin.android.easyscrollpicker
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 /**
@@ -13,11 +19,12 @@ class CustomLayoutManager<I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,
+    private val selectDelay: Long,
     private val onItemSelect: ((item:I)->Unit)?,
     private val onItemChangeRelativePos: ((View:View, relativePos:Int)->Unit)?
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
-
     private val viewMap = mutableMapOf<View, Int>()
+    private var waitJob: Job? = null
     private val adapter = easyScrollPicker.adapter as EasyScrollAdapter<*,I>
     private var lastSelectedPos = -1
 
@@ -59,10 +66,6 @@ class CustomLayoutManager<I>(
                 val distanceFromScreenCenter = abs(mid - childMid)
 
                 if (distanceFromScreenCenter < elemWidth / 2) {
-                    //got the central element
-                    onItemSelect?.let {
-                        select(child)
-                    }
 
                     for (j in -i..-1)
                         checkIfItemPosChanged(getChildAt(i+j), j) //LEFT ITEMS
@@ -71,6 +74,11 @@ class CustomLayoutManager<I>(
 
                     for (k in 1..childCount)
                         checkIfItemPosChanged(getChildAt(i+k), k) //RIGHT ITEMS
+
+                    //Select the central elem
+                    onItemSelect?.let {
+                        selectWithDelay(child)
+                    }
 
                     i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
                 }
@@ -95,6 +103,29 @@ class CustomLayoutManager<I>(
             }
         }
 
+    }
+
+    private fun selectWithDelay(view:View){
+        if (selectDelay == 0L){
+            select(view)
+            return
+        }
+
+        var delay:Long = selectDelay
+
+        if (waitJob != null){
+            waitJob!!.cancel()
+            waitJob = null
+        }else{
+            delay = 0
+        }
+
+        waitJob = GlobalScope.launch(Dispatchers.IO) {
+            delay(delay)
+            withContext(Dispatchers.Main){
+                select(view)
+            }
+        }
     }
 
     private fun select(elem: View){

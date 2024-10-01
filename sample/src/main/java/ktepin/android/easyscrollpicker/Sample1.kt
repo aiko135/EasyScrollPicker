@@ -43,6 +43,7 @@ class Sample1 : Activity() {
             },
             onItemSelect = {
                 Log.d("Test", "Selected $it")
+                binding.selected.text = it.toString()
             },
             decorateViewHolderAtPos = { holder, relativePos ->
                 Log.d("Test", "holder $holder at pos $relativePos")
