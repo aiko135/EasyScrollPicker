@@ -10,5 +10,5 @@ class EasyScrollCallbacks<VH : RecyclerView.ViewHolder, I>(
 
     /* Optional arguments */
     val onItemSelect: ((item: I) -> Unit)? = null,
-    val decorateViewHolderAtPos: ((holder: VH, relativePos: Int) -> Unit)? = null
+    val decorateViewHolderAtPos: ((holder: VH, relativePos: Int, item: I) -> Unit)? = null
 )

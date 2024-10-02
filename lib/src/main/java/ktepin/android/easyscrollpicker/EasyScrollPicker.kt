@@ -2,6 +2,7 @@ package ktepin.android.easyscrollpicker
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -82,25 +83,35 @@ class EasyScrollPicker : RecyclerView {
     internal fun <VH : ViewHolder, I> configure(
         easyScrollCallbacks: EasyScrollCallbacks<VH, I>,
     ) {
-        callbacks = easyScrollCallbacks.also{
+        var onDecorateCb: ((View: View, relativePos: Int)->Unit)? = null
+        easyScrollCallbacks.decorateViewHolderAtPos?.let { highLevelCallback ->
+            onDecorateCb = { v, pos ->
+                val itemOrNull: Any? =  adapter!!.getItemAtPos(getChildAdapterPosition(v))
+                itemOrNull?.let { item ->
+                    highLevelCallback.invoke(
+                        getChildViewHolder(v) as VH,
+                        pos,
+                        item as I
+                    )
+                }
+
+            }
+        }
+
+        callbacks = easyScrollCallbacks.also{ cb->
             adapter = EasyScrollAdapter(
-                it.onCreateViewHolder,
-                it.onBindViewHolder
+                cb.onCreateViewHolder,
+                cb.onBindViewHolder
             )
             layoutManager = CustomLayoutManager<I>(
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
                 enableMagneticFinisher = enableSnapFinisher,
-                onItemSelect = it.onItemSelect,
+                onItemSelect = cb.onItemSelect,
                 selectDelay = selectDelay.toLong(),
-                onItemChangeRelativePos =
-                    it.decorateViewHolderAtPos?.let {{ untypedView, relativePos ->
-                        easyScrollCallbacks.decorateViewHolderAtPos!!.invoke(
-                            getChildViewHolder(untypedView) as VH,
-                            relativePos
-                        )
-                    }}
+                onItemChangeRelativePos = onDecorateCb
+
             )
         }
     }
@@ -127,13 +138,6 @@ class EasyScrollPicker : RecyclerView {
             stopScroll()
             scrollToPosition(initialPos)
         }
-    }
-
-    fun replaceItemDecoration(decoration: DividerItemDecoration){
-        while (this.itemDecorationCount > 0) {
-            this.removeItemDecorationAt(0)
-        }
-        this.addItemDecoration(decoration)
     }
 
     companion object {
