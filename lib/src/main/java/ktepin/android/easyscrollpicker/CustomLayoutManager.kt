@@ -1,13 +1,8 @@
 package ktepin.android.easyscrollpicker
 
-import android.content.Context
-import android.graphics.PointF
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SmoothScroller
-import androidx.recyclerview.widget.SnapHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -25,7 +20,6 @@ class CustomLayoutManager<I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,
-    private val enableMagneticFinisher: Boolean,
     private val selectDelay: Long,
     private val onItemSelect: ((item: I) -> Unit)?,
     private val onItemChangeRelativePos: ((View: View, relativePos: Int) -> Unit)?,

@@ -48,12 +48,6 @@ class Sample2 : Activity() {
             }
         )
 
-        DividerItemDecoration(this, DividerItemDecoration.VERTICAL).let { decoration ->
-            val drawable = AppCompatResources.getDrawable(this, R.drawable.space_between_24dp)
-            drawable?.let { decoration.setDrawable(it) }
-            binding.easyScrollPicker.addItemDecoration(decoration)
-        }
-
         val dataset = (1..100).toList()
         scrollPickerManager.setInitialPosition(0)
         scrollPickerManager.setItems(dataset)

@@ -4,5 +4,6 @@
         <attr name="itemsOnScreen" format="integer"/>
         <attr name="selectDelayMs" format="integer"/>
         <attr name="enableSnapFinisher" format="boolean"/>
+        <attr name="scrollSpeedFactor" format="float"/>
     </declare-styleable>
 </resources>

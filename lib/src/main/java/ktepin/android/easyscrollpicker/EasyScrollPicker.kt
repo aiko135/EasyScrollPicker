@@ -3,6 +3,7 @@ package ktepin.android.easyscrollpicker
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -20,8 +21,8 @@ class EasyScrollPicker : RecyclerView {
     private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
     private var selectDelay = DEFAULT_SELECT_DELAY_MS
-    private var enableSnapFinisher = DEFAULT_ENABLE_SNAP
     private var snapHelper: SnapHelper? = null
+    private var scrollSpeedFactor = DEFAULT_SCROLL_SPEED_FACTOR
 
     init {
         this.clipToPadding = false
@@ -58,6 +59,10 @@ class EasyScrollPicker : RecyclerView {
             snapHelper = LinearSnapHelper()
             snapHelper?.attachToRecyclerView(this)
         }
+
+        val speedFactor = attrs.getFloat(R.styleable.EasyScrollPicker_scrollSpeedFactor, DEFAULT_SCROLL_SPEED_FACTOR)
+        if (speedFactor > 0.0f)
+            scrollSpeedFactor = speedFactor
 
         attrs.recycle()
     }
@@ -107,11 +112,9 @@ class EasyScrollPicker : RecyclerView {
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
-                enableMagneticFinisher = enableSnapFinisher,
                 onItemSelect = cb.onItemSelect,
                 selectDelay = selectDelay.toLong(),
                 onItemChangeRelativePos = onDecorateCb
-
             )
         }
     }
@@ -127,6 +130,16 @@ class EasyScrollPicker : RecyclerView {
 
         val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
         setPadding(clipPadding, 0, clipPadding, 0)
+    }
+
+    override fun fling(velocityX: Int, velocityY: Int): Boolean {
+        if (scrollSpeedFactor > 0.0f){
+            val modifiedX = (velocityX * scrollSpeedFactor).toInt()
+            val modifiedY = (velocityY * scrollSpeedFactor).toInt()
+            return super.fling(modifiedX, modifiedY)
+        }else{
+            return super.fling(velocityX, velocityY)
+        }
     }
 
     internal fun setItems(items: List<*>) {
@@ -147,5 +160,6 @@ class EasyScrollPicker : RecyclerView {
         private const val DEFAULT_ENABLE_SNAP = false
         private const val DEFAULT_ITEMS_ON_SCREEN = 3
         private const val DEFAULT_INIT_POS = 0
+        private const val DEFAULT_SCROLL_SPEED_FACTOR = -1.0f
     }
 }
