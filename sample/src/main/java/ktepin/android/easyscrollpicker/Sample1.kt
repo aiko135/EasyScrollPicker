@@ -18,20 +18,13 @@ class Sample1 : Activity() {
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val text: TextView
-
-        init {
-            text = view.findViewById(R.id.text)
-        }
+        val text: TextView = view.findViewById(R.id.text)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //wrong
-        //binding.easyScrollPicker.adapter = Sample1Adapter()
-        //--- TODO TEST IN FRAGMENT ---
-        // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
+        // use in generic <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
