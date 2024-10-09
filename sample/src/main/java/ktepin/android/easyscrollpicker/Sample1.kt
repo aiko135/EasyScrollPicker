@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
@@ -18,7 +19,8 @@ class Sample1 : Activity() {
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val text: TextView = view.findViewById(R.id.text)
+        val payloadText: TextView = view.findViewById(R.id.payloadText)
+        val posText: TextView = view.findViewById(R.id.posText)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,17 +30,17 @@ class Sample1 : Activity() {
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_number, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
                 ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
-                holder.text.text = item.toString()
+                holder.payloadText.text = item.toString()
             },
             onItemSelect = {
-                Log.d("Test", "Selected $it")
                 binding.selected.text = it.toString()
             },
             decorateViewHolderAtPos = { holder, relativePos, item ->
+                holder.posText.text = relativePos.toString()
                 Log.d("Test", "holder $holder at pos $relativePos with item $item")
             }
         )

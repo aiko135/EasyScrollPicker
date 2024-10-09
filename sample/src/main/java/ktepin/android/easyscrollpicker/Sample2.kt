@@ -20,7 +20,7 @@ class Sample2 : Activity() {
         val text: TextView
 
         init {
-            text = view.findViewById(R.id.text)
+            text = view.findViewById(R.id.payloadText)
         }
     }
 
@@ -34,7 +34,7 @@ class Sample2 : Activity() {
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_number, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
                 ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
