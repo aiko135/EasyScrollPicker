@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  *    Note: this facade required only to perform right generics to lib user, under the hood they will be unbounded
  */
-class EasyScrollManager<VH : RecyclerView.ViewHolder, I>(
+class EasyScrollManager<VH : EasyViewHolder<I>, I>(
     private val easyScrollPicker: EasyScrollPicker,
     /* Required arguments */
     onCreateViewHolder: (parent: ViewGroup) -> VH,
@@ -18,7 +18,6 @@ class EasyScrollManager<VH : RecyclerView.ViewHolder, I>(
 
     /* Optional arguments */
     onItemSelect: ((item: I) -> Unit)? = null,
-    decorateViewHolderAtPos: ((holder: VH, relativePos: Int, item: I) -> Unit)? = null
 ) {
     init {
         easyScrollPicker.configure(
@@ -26,7 +25,6 @@ class EasyScrollManager<VH : RecyclerView.ViewHolder, I>(
                 onCreateViewHolder = onCreateViewHolder,
                 onBindViewHolder = onBindViewHolder,
                 onItemSelect = onItemSelect,
-                decorateViewHolderAtPos = decorateViewHolderAtPos
             )
         )
     }

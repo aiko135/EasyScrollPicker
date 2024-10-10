@@ -76,44 +76,36 @@ class EasyScrollPicker : RecyclerView {
     override fun getAdapter(): EasyScrollAdapter<*, *>? = super.getAdapter() as EasyScrollAdapter<*, *>?
 
     override fun setLayoutManager(lm: LayoutManager?) {
-        if (lm is CustomLayoutManager<*>) {
+        if (lm is CustomLayoutManager<*, *>) {
             super.setLayoutManager(lm)
         } else {
             throw WrongLayoutManagerException(context)
         }
     }
 
-    internal fun <VH : ViewHolder, I> configure(
+    internal fun <VH : EasyViewHolder<I>, I> configure(
         easyScrollCallbacks: EasyScrollCallbacks<VH, I>,
     ) {
-        var decorateCb: ((View: View, relativePos: Int)->Unit)? = null
-        easyScrollCallbacks.decorateViewHolderAtPos?.let { usersCallback ->
-            decorateCb = { v, pos ->
-                val itemOrNull: Any? =  adapter!!.getItemAtPos(getChildAdapterPosition(v))
-                itemOrNull?.let { item ->
-                    usersCallback.invoke(
-                        getChildViewHolder(v) as VH,
-                        pos,
-                        item as I
-                    )
-                }
-
-            }
-        }
-
         callbacks = easyScrollCallbacks.also{ cb->
             adapter = EasyScrollAdapter(
                 cb.onCreateViewHolder,
                 cb.onBindViewHolder
             )
-            layoutManager = CustomLayoutManager<I>(
+            layoutManager = CustomLayoutManager<VH, I>(
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
                 onItemSelect = cb.onItemSelect,
-                selectDelay = selectDelay.toLong(),
-                onItemChangeRelativePos = decorateCb
+                selectDelay = selectDelay.toLong()
             )
+        }
+    }
+
+    internal fun <VH : EasyViewHolder<I>, I> onItemChangeRelativePos(view: View, relativePos: Int){
+        adapter?.getItemAtPos(getChildAdapterPosition(view))?.let { payloadItem ->
+            val vh = getChildViewHolder(view) as VH
+            payloadItem as I
+            vh.decorateViewAtPos(relativePos, payloadItem)
         }
     }
 

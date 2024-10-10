@@ -16,7 +16,7 @@ class Sample2 : Activity() {
         ActivitySample2Binding.inflate(layoutInflater)
     }
 
-    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(view: View) : EasyViewHolder<Int>(view) {
         val text: TextView
 
         init {

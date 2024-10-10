@@ -16,13 +16,12 @@ import kotlin.math.abs
  * inspired by
  * https://github.com/adityagohad/HorizontalPicker/blob/master/horizontalpickerlib/src/main/java/travel/ithaka/android/horizontalpickerlib/PickerLayoutManager.java
  */
-class CustomLayoutManager<I>(
+class CustomLayoutManager<VH:EasyViewHolder<I>, I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,
     private val selectDelay: Long,
     private val onItemSelect: ((item: I) -> Unit)?,
-    private val onItemChangeRelativePos: ((View: View, relativePos: Int) -> Unit)?,
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
     private val viewMap = mutableMapOf<View, Int>()
     private var waitJob: Job? = null
@@ -31,9 +30,7 @@ class CustomLayoutManager<I>(
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         super.onLayoutChildren(recycler, state)
-        onItemChangeRelativePos?.let {
-            observeOnChange()
-        }
+        observeOnChange()
     }
 
     override fun scrollHorizontallyBy(
@@ -44,9 +41,7 @@ class CustomLayoutManager<I>(
         val orientation = orientation
         return if (orientation == HORIZONTAL) {
             val scrolled = super.scrollHorizontallyBy(dx, recycler, state)
-            onItemChangeRelativePos?.let {
-                observeOnChange()
-            }
+            observeOnChange()
             scrolled
         } else {
             0
@@ -96,11 +91,11 @@ class CustomLayoutManager<I>(
             viewMap[v]?.let {
                 if (it != relativePos){
                     viewMap[v] = relativePos
-                    onItemChangeRelativePos?.invoke(v, relativePos)
+                    easyScrollPicker.onItemChangeRelativePos<VH, I>(view, relativePos)
                 }
             } ?:run {
                 viewMap[v] = relativePos
-                onItemChangeRelativePos?.invoke(v, relativePos)
+                easyScrollPicker.onItemChangeRelativePos<VH, I>(view, relativePos)
             }
         }
 

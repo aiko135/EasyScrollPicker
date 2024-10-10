@@ -15,9 +15,14 @@ class Sample1 : Activity() {
         ActivitySample1Binding.inflate(layoutInflater)
     }
 
-    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(view: View) : EasyViewHolder<Int>(view) {
         val payloadText: TextView = view.findViewById(R.id.payloadText)
         val posText: TextView = view.findViewById(R.id.posText)
+
+        override fun decorateViewAtPos(relativePos: Int, item: Int) {
+            posText.text = String.format("%d", relativePos)
+            Log.d("Test", "holder $this at pos $relativePos with item $item")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +40,6 @@ class Sample1 : Activity() {
             },
             onItemSelect = {
                 binding.selected.text = it.toString()
-            },
-            decorateViewHolderAtPos = { holder, relativePos, item ->
-                holder.posText.text = String.format("%d", relativePos)
-                Log.d("Test", "holder $holder at pos $relativePos with item $item")
             }
         )
         val dataset = (1..100).toList()
