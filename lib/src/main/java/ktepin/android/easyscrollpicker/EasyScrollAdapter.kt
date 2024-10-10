@@ -18,6 +18,7 @@ class EasyScrollAdapter<VH : ViewHolder, I>(
             holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 width = elemWidth
             }
+            holder.itemView.requestLayout()
         }
         return holder
     }

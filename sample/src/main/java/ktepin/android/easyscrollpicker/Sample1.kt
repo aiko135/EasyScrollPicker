@@ -6,11 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.postDelayed
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
 
 class Sample1 : Activity() {
@@ -27,8 +24,29 @@ class Sample1 : Activity() {
         super.onCreate(savedInstanceState)
 
         // use in generic <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
-        val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
+        val pickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
+            onCreateViewHolder = { parent ->
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
+                ItemViewHolder(view)
+            },
+            onBindViewHolder = { holder, item ->
+                holder.payloadText.text = String.format("%d", item)
+            },
+            onItemSelect = {
+                binding.selected.text = it.toString()
+            },
+            decorateViewHolderAtPos = { holder, relativePos, item ->
+                holder.posText.text = String.format("%d", relativePos)
+                Log.d("Test", "holder $holder at pos $relativePos with item $item")
+            }
+        )
+        val dataset = (1..100).toList()
+        pickerManager.setItems(dataset)
+
+
+        val pickerManager2 = EasyScrollManager<ItemViewHolder, Int>(
+            easyScrollPicker = binding.easyScrollPicker2,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
                 ItemViewHolder(view)
@@ -37,25 +55,18 @@ class Sample1 : Activity() {
                 holder.payloadText.text = item.toString()
             },
             onItemSelect = {
-                binding.selected.text = it.toString()
+                binding.selected2.text = it.toString()
             },
             decorateViewHolderAtPos = { holder, relativePos, item ->
                 holder.posText.text = relativePos.toString()
                 Log.d("Test", "holder $holder at pos $relativePos with item $item")
             }
         )
+        pickerManager2.setInitialPosition(4)
+        binding.root.postDelayed(1000){
+            pickerManager2.setItems(dataset)
+        }
 
-        val dataset = (1..100).toList()
-        scrollPickerManager.setInitialPosition(0)
-        scrollPickerManager.setItems(dataset)
-
-//        GlobalScope.launch {
-//            delay(5000)
-//            runOnUiThread {
-//                scrollPickerManager.setInitialPosition(4)
-//                scrollPickerManager.setItems(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17))
-//            }
-//        }
 
         setContentView(binding.root)
     }

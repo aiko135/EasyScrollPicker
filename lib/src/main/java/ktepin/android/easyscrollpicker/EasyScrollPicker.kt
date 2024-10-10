@@ -3,8 +3,6 @@ package ktepin.android.easyscrollpicker
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -88,12 +86,12 @@ class EasyScrollPicker : RecyclerView {
     internal fun <VH : ViewHolder, I> configure(
         easyScrollCallbacks: EasyScrollCallbacks<VH, I>,
     ) {
-        var onDecorateCb: ((View: View, relativePos: Int)->Unit)? = null
-        easyScrollCallbacks.decorateViewHolderAtPos?.let { highLevelCallback ->
-            onDecorateCb = { v, pos ->
+        var decorateCb: ((View: View, relativePos: Int)->Unit)? = null
+        easyScrollCallbacks.decorateViewHolderAtPos?.let { usersCallback ->
+            decorateCb = { v, pos ->
                 val itemOrNull: Any? =  adapter!!.getItemAtPos(getChildAdapterPosition(v))
                 itemOrNull?.let { item ->
-                    highLevelCallback.invoke(
+                    usersCallback.invoke(
                         getChildViewHolder(v) as VH,
                         pos,
                         item as I
@@ -114,7 +112,7 @@ class EasyScrollPicker : RecyclerView {
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
                 onItemSelect = cb.onItemSelect,
                 selectDelay = selectDelay.toLong(),
-                onItemChangeRelativePos = onDecorateCb
+                onItemChangeRelativePos = decorateCb
             )
         }
     }
