@@ -36,9 +36,11 @@ class Sample1 : Activity() {
                 ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
+                //Here we should bind holder with a passed item
                 holder.payloadText.text = String.format("%d", item)
             },
             onItemSelect = {
+                //here we got item (payload) of the central element
                 binding.selected.text = it.toString()
             }
         )
