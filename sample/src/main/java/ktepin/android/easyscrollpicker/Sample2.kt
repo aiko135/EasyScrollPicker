@@ -42,9 +42,6 @@ class Sample2 : Activity() {
             },
             onItemSelect = {
                 Log.d("Test", "Selected $it")
-            },
-            decorateViewHolderAtPos = { holder, relativePos, _ ->
-                Log.d("Test", "holder $holder at pos $relativePos")
             }
         )
 

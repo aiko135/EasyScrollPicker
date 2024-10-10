@@ -19,13 +19,13 @@
             android:id="@+id/btnSample1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #1"/>
+            android:text="Sample #1 - Generic use"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSample2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #2"/>
+            android:text="Sample #2 - Visual design"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSample3"

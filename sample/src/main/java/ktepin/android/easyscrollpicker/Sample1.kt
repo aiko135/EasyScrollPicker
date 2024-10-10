@@ -57,10 +57,6 @@ class Sample1 : Activity() {
             },
             onItemSelect = {
                 binding.selected2.text = it.toString()
-            },
-            decorateViewHolderAtPos = { holder, relativePos, item ->
-                holder.posText.text = relativePos.toString()
-                Log.d("Test", "holder $holder at pos $relativePos with item $item")
             }
         )
         pickerManager2.setInitialPosition(4)
