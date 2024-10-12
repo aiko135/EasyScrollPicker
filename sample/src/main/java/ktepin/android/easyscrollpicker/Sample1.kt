@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.postDelayed
-import androidx.recyclerview.widget.RecyclerView
 import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
 
 class Sample1 : Activity() {
@@ -15,7 +14,7 @@ class Sample1 : Activity() {
         ActivitySample1Binding.inflate(layoutInflater)
     }
 
-    class ItemViewHolder(view: View) : EasyViewHolder<Int>(view) {
+    class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
         val payloadText: TextView = view.findViewById(R.id.payloadText)
         val posText: TextView = view.findViewById(R.id.posText)
 

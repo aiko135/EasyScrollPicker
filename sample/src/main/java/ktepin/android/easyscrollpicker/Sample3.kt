@@ -1,32 +1,44 @@
 package ktepin.android.easyscrollpicker
 
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import ktepin.android.easyscrollpicker.databinding.ActivitySample2Binding
+import ktepin.android.easyscrollpicker.databinding.ActivitySample3Binding
 
-class Sample2 : Activity() {
-    private val binding: ActivitySample2Binding by lazy {
-        ActivitySample2Binding.inflate(layoutInflater)
+class Sample3 : Activity() {
+    private val binding: ActivitySample3Binding by lazy {
+        ActivitySample3Binding.inflate(layoutInflater)
     }
 
     class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
-        val text: TextView
+        val itemText: TextView
+        val posText: TextView = view.findViewById(R.id.posText)
+
+        override fun decorateViewAtPos(relativePos: Int, item: Int) {
+            posText.text = String.format("%d", relativePos)
+        }
+
+        override fun buildAnimations(): List<EasyScrollAnimation> {
+            val animator = ValueAnimator.ofFloat(14.0f, 16.0f).apply {
+                addUpdateListener {
+                    itemText.textSize = animatedValue as Float
+                }
+            }
+            return listOf(EasyScrollAnimation(1,0,true, animator))
+        }
 
         init {
-            text = view.findViewById(R.id.payloadText)
+            itemText = view.findViewById(R.id.payloadText)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //wrong
-        //binding.easyScrollPicker.adapter = Sample1Adapter()
-        //--- TODO TEST IN FRAGMENT ---
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
@@ -46,13 +58,6 @@ class Sample2 : Activity() {
         scrollPickerManager.setInitialPosition(0)
         scrollPickerManager.setItems(dataset)
 
-//        GlobalScope.launch {
-//            delay(5000)
-//            runOnUiThread {
-//                scrollPickerManager.setInitialPosition(4)
-//                scrollPickerManager.setItems(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17))
-//            }
-//        }
 
         setContentView(binding.root)
     }

@@ -3,10 +3,11 @@ package ktepin.android.easyscrollpicker
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class EasyViewHolder<I>(
+abstract class EasyScrollViewHolder<I>(
     view: View,
 ) : RecyclerView.ViewHolder(view) {
-
     open fun decorateViewAtPos(relativePos: Int, item: I) { }
-    open fun animationStep(prevPos:Int, newPos:Int, animStep:Int){ }
+    open fun buildAnimations(): List<EasyScrollAnimation>{
+        return listOf()
+    }
 }

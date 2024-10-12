@@ -76,14 +76,14 @@ class EasyScrollPicker : RecyclerView {
     override fun getAdapter(): EasyScrollAdapter<*, *>? = super.getAdapter() as EasyScrollAdapter<*, *>?
 
     override fun setLayoutManager(lm: LayoutManager?) {
-        if (lm is CustomLayoutManager<*, *>) {
+        if (lm is EasyScrollLayoutManager<*, *>) {
             super.setLayoutManager(lm)
         } else {
             throw WrongLayoutManagerException(context)
         }
     }
 
-    internal fun <VH : EasyViewHolder<I>, I> configure(
+    internal fun <VH : EasyScrollViewHolder<I>, I> configure(
         easyScrollCallbacks: EasyScrollCallbacks<VH, I>,
     ) {
         callbacks = easyScrollCallbacks.also{ cb->
@@ -91,7 +91,7 @@ class EasyScrollPicker : RecyclerView {
                 cb.onCreateViewHolder,
                 cb.onBindViewHolder
             )
-            layoutManager = CustomLayoutManager<VH, I>(
+            layoutManager = EasyScrollLayoutManager<VH, I>(
                 easyScrollPicker = this,
                 orientation = DEFAULT_ORIENTATION,
                 reverseLayout = DEFAULT_REVERSE_LAYOUT,
@@ -101,7 +101,7 @@ class EasyScrollPicker : RecyclerView {
         }
     }
 
-    internal fun <VH : EasyViewHolder<I>, I> onItemChangeRelativePos(view: View, relativePos: Int){
+    internal fun <VH : EasyScrollViewHolder<I>, I> onItemChangeRelativePos(view: View, relativePos: Int){
         adapter?.getItemAtPos(getChildAdapterPosition(view))?.let { payloadItem ->
             val vh = getChildViewHolder(view) as VH
             payloadItem as I

@@ -16,7 +16,7 @@ import kotlin.math.abs
  * inspired by
  * https://github.com/adityagohad/HorizontalPicker/blob/master/horizontalpickerlib/src/main/java/travel/ithaka/android/horizontalpickerlib/PickerLayoutManager.java
  */
-class CustomLayoutManager<VH:EasyViewHolder<I>, I>(
+class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
     private val easyScrollPicker: EasyScrollPicker,
     orientation: Int,
     reverseLayout: Boolean,

@@ -1,7 +1,6 @@
 package ktepin.android.easyscrollpicker
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 
 /**
  * there are 2 generics used in the lib. This generics passed by user form the app level
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  *    Note: this facade required only to perform right generics to lib user, under the hood they will be unbounded
  */
-class EasyScrollManager<VH : EasyViewHolder<I>, I>(
+class EasyScrollManager<VH : EasyScrollViewHolder<I>, I>(
     private val easyScrollPicker: EasyScrollPicker,
     /* Required arguments */
     onCreateViewHolder: (parent: ViewGroup) -> VH,

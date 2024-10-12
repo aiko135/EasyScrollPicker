@@ -31,7 +31,7 @@
             android:id="@+id/btnSample3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #3"/>
+            android:text="Sample #3 - Animated"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
