@@ -17,12 +17,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <TextView
             android:layout_marginTop="20dp"
-            android:id="@+id/easyScrollPicker"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="itemsOnScreen=3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ktepin.android.easyscrollpicker.EasyScrollPicker
+            android:layout_marginTop="10dp"
+            android:id="@+id/easyScrollPicker1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemsOnScreen="3"
+            app:enableSnapFinisher="true"
+            app:selectDelayMs="400"
+            tools:listitem="@layout/sample_item"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="itemsOnScreen=5 and "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ktepin.android.easyscrollpicker.EasyScrollPicker
+            android:layout_marginTop="10dp"
+            android:id="@+id/easyScrollPicker2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemsOnScreen="5"
+            app:enableSnapFinisher="true"
+            app:selectDelayMs="400"
+            tools:listitem="@layout/sample_item"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="two animations depending on index"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ktepin.android.easyscrollpicker.EasyScrollPicker
+            android:layout_marginTop="10dp"
+            android:id="@+id/easyScrollPicker3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemsOnScreen="5"
             app:enableSnapFinisher="true"
             app:selectDelayMs="400"
             tools:listitem="@layout/sample_item"/>
