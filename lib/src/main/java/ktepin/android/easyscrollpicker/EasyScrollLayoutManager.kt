@@ -145,12 +145,4 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
             it.setCurrentFraction(relativeFraction)
         }
     }
-
-    enum class Magnitude{
-        POSITIVE, NEGATIVE
-    }
-
-    companion object{
-        private const val VIEW_MAP_LIMIT = 100
-    }
 }
