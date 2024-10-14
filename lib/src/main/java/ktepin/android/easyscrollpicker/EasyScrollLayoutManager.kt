@@ -68,6 +68,7 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
 
                     if (child != prevCentralView){
                         notifyRelativePosChange(child, i, childCount)
+                        prevCentralView = child
                     }
 
                     if (skipAnimationsHeartbeat)

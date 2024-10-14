@@ -32,7 +32,7 @@ class Sample3 : Activity() {
                 }
                 interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
             }
-            setAnimations(mapOf(0 to animator))
+            applyAnimations(mapOf(0 to animator))
         }
     }
 
@@ -60,10 +60,20 @@ class Sample3 : Activity() {
                     itemText.rotation = animatedValue as Float
                 }
             }
-            setAnimations(mapOf(
+            applyAnimations(mapOf(
                 0 to animator1,
                 1 to animator2
             ))
+        }
+
+        override fun decorateViewAtPos(relativePos: Int, item: Int) {
+//            animations.forEach {
+//                it.value.setCurrentFraction(0.0f)
+//            }
+            if (itemText.text.contains("6")){
+                Log.d("rotation", "6th item became $relativePos")
+            }
+            itemText.rotation = 0.0f
         }
     }
 

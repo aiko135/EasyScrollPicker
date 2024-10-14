@@ -8,8 +8,8 @@ abstract class EasyScrollViewHolder<I>(
     view: View,
 ) : RecyclerView.ViewHolder(view) {
     //Map: Integer is animation index, ValueAnimator is user's defined animation
-    internal var animations: Map<Int, ValueAnimator> = mapOf()
-    protected fun setAnimations(animations: Map<Int, ValueAnimator>){
+    var animations: Map<Int, ValueAnimator> = mapOf()
+    protected fun applyAnimations(animations: Map<Int, ValueAnimator>){
         animations.keys.forEach {
             if (it < 0)
                 throw IndexOutOfBoundsException()
