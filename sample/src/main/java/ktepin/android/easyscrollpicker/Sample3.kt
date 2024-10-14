@@ -54,9 +54,11 @@ class Sample3 : Activity() {
             }
             val animator2 = ValueAnimator.ofFloat(0f, 359f).apply {
                 addUpdateListener {
+                    if (itemText.text.contains("6")){
+                        Log.d("rotation", "${animatedValue as Float}")
+                    }
                     itemText.rotation = animatedValue as Float
                 }
-                interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
             }
             setAnimations(mapOf(
                 0 to animator1,

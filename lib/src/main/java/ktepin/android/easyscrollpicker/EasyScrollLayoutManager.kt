@@ -61,9 +61,7 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
             getChildAt(i)?.let { child ->
                 // Calculating the distance between the child center and the center
                 val childMid = (getDecoratedLeft(child) + getDecoratedRight(child)) / 2.0f
-                val rawDist = containerMid - childMid
-                val magnitude = if (rawDist >= 0 ) Magnitude.POSITIVE else Magnitude.NEGATIVE
-                val distToCenter = abs(rawDist)
+                val distToCenter = abs(containerMid - childMid)
 
                 if (distToCenter < elemWidth / 2) {
                     //central view detected here
@@ -76,7 +74,7 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
                         i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
                 }
 
-                calculateAnim(easyScrollPicker.getChildViewHolder(child)!! as VH, distToCenter.toInt(), elemWidth, magnitude)
+                calculateAnim(easyScrollPicker.getChildViewHolder(child)!! as VH, distToCenter.toInt(), elemWidth)
             }
             i++
         }
@@ -137,7 +135,7 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
 
     }
 
-    private fun calculateAnim(vh: VH, distToCenter: Int, elemWidth: Int, halfOfParent: Magnitude){
+    private fun calculateAnim(vh: VH, distToCenter: Int, elemWidth: Int){
         val closerToCenterPosAbs = distToCenter / elemWidth
 
         vh.animations[closerToCenterPosAbs]?.let {
