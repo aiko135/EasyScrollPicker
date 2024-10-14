@@ -4,11 +4,11 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import ktepin.android.easyscrollpicker.databinding.ActivitySample3Binding
-import kotlin.math.abs
 
 class Sample3 : Activity() {
     private val binding: ActivitySample3Binding by lazy {
@@ -16,23 +16,23 @@ class Sample3 : Activity() {
     }
 
     class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
+        private val bigTextSize = dpToPx(view.context, 24)
+        private val smallTextSize = dpToPx(view.context, 18)
+
         val itemText: TextView
+
         init {
             itemText = view.findViewById(R.id.payloadText)
-            itemText.textSize = SMALL_TEXT_SIZE
+            itemText.setTextSize(COMPLEX_UNIT_PX, smallTextSize)
 
-            val animator = ValueAnimator.ofFloat(SMALL_TEXT_SIZE, BIG_TEXT_SIZE).apply {
+            val animator = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
                 addUpdateListener {
-                    itemText.textSize = animatedValue as Float
-                    itemText.requestLayout()
+                    itemText.setTextSize(COMPLEX_UNIT_PX, animatedValue as Float)
+                    itemText.invalidate()
+                    itemText.parent.requestLayout()
                 }
             }
             setAnimations(mapOf(0 to animator))
-        }
-
-        companion object{
-            private const val BIG_TEXT_SIZE = 16.0f
-            private const val SMALL_TEXT_SIZE = 10.0f
         }
     }
 

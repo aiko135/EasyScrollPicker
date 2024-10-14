@@ -141,12 +141,10 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
         val closerToCenterPosAbs = distToCenter / elemWidth
 
         vh.animations[closerToCenterPosAbs]?.let {
-            var relativeFraction = distToCenter % elemWidth
-            if (halfOfParent == Magnitude.POSITIVE){
-                relativeFraction = - relativeFraction
-            }
-            val finalFraction = relativeFraction.toFloat() / elemWidth.toFloat()
-            it.setCurrentFraction(finalFraction)
+            val mod = distToCenter % elemWidth
+            var relativeFraction = mod.toFloat() / elemWidth.toFloat()
+            relativeFraction = 1.0f - relativeFraction
+            it.setCurrentFraction(relativeFraction)
         }
     }
 
