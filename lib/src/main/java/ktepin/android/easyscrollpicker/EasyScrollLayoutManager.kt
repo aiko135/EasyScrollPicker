@@ -1,5 +1,6 @@
 package ktepin.android.easyscrollpicker
 
+import android.animation.ValueAnimator
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +23,9 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
     reverseLayout: Boolean,
     private val selectDelay: Long,
     private val onItemSelect: ((item: I) -> Unit)?,
+    private val skipAnimationsHeartbeat: Boolean = false
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
-    private val viewMap = mutableMapOf<View, Int>()
+    private var prevCentralView: View? = null
     private var waitJob: Job? = null
     private val adapter = easyScrollPicker.adapter as EasyScrollAdapter<*,I>
     private var lastSelectedPos = -1
@@ -49,7 +51,7 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
     }
 
     private fun observeOnChange() {
-        val mid = width / 2.0f
+        val containerMid = width / 2.0f
         val elemWidth = getChildAt(0)?.width
             ?: return //all containers have the same width, so we can take the width of the first one
 
@@ -57,48 +59,48 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
         while (i < childCount) {
 
             getChildAt(i)?.let { child ->
-                // Calculating the distance of the child from the center
+                // Calculating the distance between the child center and the center
                 val childMid = (getDecoratedLeft(child) + getDecoratedRight(child)) / 2.0f
-                val distanceFromScreenCenter = abs(mid - childMid)
+                val rawDist = containerMid - childMid
+                val magnitude = if (rawDist >= 0 ) Magnitude.POSITIVE else Magnitude.NEGATIVE
+                val distToCenter = abs(rawDist)
 
-                if (distanceFromScreenCenter < elemWidth / 2) {
+                if (distToCenter < elemWidth / 2) {
+                    //central view detected here
 
-                    for (j in -i..-1)
-                        checkIfItemPosChanged(getChildAt(i+j), j) //LEFT ITEMS
-
-                    checkIfItemPosChanged(child, 0) //CENTRAL ITEM
-
-                    for (k in 1..childCount)
-                        checkIfItemPosChanged(getChildAt(i+k), k) //RIGHT ITEMS
-
-                    //Select the central elem
-                    onItemSelect?.let {
-                        selectWithDelay(child)
+                    if (child != prevCentralView){
+                        notifyRelativePosChange(child, i, childCount)
                     }
 
-                    i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
+                    if (skipAnimationsHeartbeat)
+                        i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
                 }
+
+                calculateAnim(easyScrollPicker.getChildViewHolder(child)!! as VH, distToCenter.toInt(), elemWidth, magnitude)
             }
             i++
         }
     }
 
-    private fun checkIfItemPosChanged(view:View?, relativePos:Int){
-        view?.let { v ->
-            if (viewMap.size > VIEW_MAP_LIMIT)
-                viewMap.clear()
+    private fun notifyRelativePosChange(central: View, centralViewIndex: Int, totalViews: Int){
+        for (j in -centralViewIndex..-1)
+            notifyView(getChildAt(centralViewIndex+j), j) //LEFT ITEMS
 
-            viewMap[v]?.let {
-                if (it != relativePos){
-                    viewMap[v] = relativePos
-                    easyScrollPicker.onItemChangeRelativePos<VH, I>(view, relativePos)
-                }
-            } ?:run {
-                viewMap[v] = relativePos
-                easyScrollPicker.onItemChangeRelativePos<VH, I>(view, relativePos)
-            }
+        notifyView(central, 0) //CENTRAL ITEM
+
+        for (k in 1..totalViews)
+            notifyView(getChildAt(centralViewIndex+k), k) //RIGHT ITEMS
+
+        //notify central as selected
+        onItemSelect?.let {
+            selectWithDelay(central)
         }
+    }
 
+    private fun notifyView(v: View?, pos: Int){
+        v?.let {
+            easyScrollPicker.onItemChangeRelativePos<VH, I>(it, pos)
+        }
     }
 
     private fun selectWithDelay(view:View){
@@ -133,6 +135,23 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
             lastSelectedPos = adapterPos
         }
 
+    }
+
+    private fun calculateAnim(vh: VH, distToCenter: Int, elemWidth: Int, halfOfParent: Magnitude){
+        val closerToCenterPosAbs = distToCenter / elemWidth
+
+        vh.animations[closerToCenterPosAbs]?.let {
+            var relativeFraction = distToCenter % elemWidth
+            if (halfOfParent == Magnitude.POSITIVE){
+                relativeFraction = - relativeFraction
+            }
+            val finalFraction = relativeFraction.toFloat() / elemWidth.toFloat()
+            it.setCurrentFraction(finalFraction)
+        }
+    }
+
+    enum class Magnitude{
+        POSITIVE, NEGATIVE
     }
 
     companion object{

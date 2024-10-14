@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import ktepin.android.easyscrollpicker.databinding.ActivitySample3Binding
+import kotlin.math.abs
 
 class Sample3 : Activity() {
     private val binding: ActivitySample3Binding by lazy {
@@ -16,23 +17,22 @@ class Sample3 : Activity() {
 
     class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
         val itemText: TextView
-        val posText: TextView = view.findViewById(R.id.posText)
-
-        override fun decorateViewAtPos(relativePos: Int, item: Int) {
-            posText.text = String.format("%d", relativePos)
-        }
-
-        override fun buildAnimations(): List<EasyScrollAnimation> {
-            val animator = ValueAnimator.ofFloat(14.0f, 16.0f).apply {
-                addUpdateListener {
-                    itemText.textSize = animatedValue as Float
-                }
-            }
-            return listOf(EasyScrollAnimation(1,0,true, animator))
-        }
-
         init {
             itemText = view.findViewById(R.id.payloadText)
+            itemText.textSize = SMALL_TEXT_SIZE
+
+            val animator = ValueAnimator.ofFloat(SMALL_TEXT_SIZE, BIG_TEXT_SIZE).apply {
+                addUpdateListener {
+                    itemText.textSize = animatedValue as Float
+                    itemText.requestLayout()
+                }
+            }
+            setAnimations(mapOf(0 to animator))
+        }
+
+        companion object{
+            private const val BIG_TEXT_SIZE = 16.0f
+            private const val SMALL_TEXT_SIZE = 10.0f
         }
     }
 
@@ -43,11 +43,11 @@ class Sample3 : Activity() {
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item3, parent, false)
                 ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
-                holder.text.text = item.toString()
+                holder.itemText.text = item.toString()
             },
             onItemSelect = {
                 Log.d("Test", "Selected $it")
@@ -55,9 +55,8 @@ class Sample3 : Activity() {
         )
 
         val dataset = (1..100).toList()
-        scrollPickerManager.setInitialPosition(0)
         scrollPickerManager.setItems(dataset)
-
+        scrollPickerManager.setInitialPosition(1)
 
         setContentView(binding.root)
     }
