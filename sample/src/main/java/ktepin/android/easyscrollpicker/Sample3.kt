@@ -184,6 +184,6 @@ class Sample3 : Activity() {
 
         val dataset = (1..100).toList()
         scrollPickerManager.setItems(dataset)
-        scrollPickerManager.setInitialPosition(2)
+        scrollPickerManager.setInitialPosition(3)
     }
 }
