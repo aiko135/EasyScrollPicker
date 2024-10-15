@@ -113,7 +113,7 @@ class EasyScrollPicker : RecyclerView {
     private fun ensureAnimsFinished(anims:Map<Int, ValueAnimator>, currentRelativePos: Int){
         val finishedAnimIndex = abs(currentRelativePos)
         anims.forEach { (animIndex, animator) ->
-            if (animIndex == finishedAnimIndex)
+            if (animIndex >= finishedAnimIndex)
                 animator.setCurrentFraction(1.0f)
             else
                 animator.setCurrentFraction(0.0f)

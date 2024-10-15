@@ -16,7 +16,8 @@ class Sample3 : Activity() {
         ActivitySample3Binding.inflate(layoutInflater)
     }
 
-    class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
+    //1st and 2th ViewHolder - Animate size
+    class ItemViewHolder1and2(view: View) : EasyScrollViewHolder<Int>(view) {
         private val bigTextSize = dpToPx(view.context, 24)
         private val smallTextSize = dpToPx(view.context, 16)
 
@@ -26,17 +27,18 @@ class Sample3 : Activity() {
             itemText = view.findViewById(R.id.payloadText)
             itemText.setTextSize(COMPLEX_UNIT_PX, smallTextSize)
 
-            val animator = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
+            val size = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
                 addUpdateListener {
                     itemText.setTextSize(COMPLEX_UNIT_PX, animatedValue as Float)
                 }
                 interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
             }
-            applyAnimations(mapOf(0 to animator))
+            applyAnimations(mapOf(0 to size))
         }
     }
 
-    class ItemViewHolder2(view: View) : EasyScrollViewHolder<Int>(view) {
+    //3th ViewHolder - Animate size & Rotation
+    class ItemViewHolder3(view: View) : EasyScrollViewHolder<Int>(view) {
         private val bigTextSize = dpToPx(view.context, 24)
         private val smallTextSize = dpToPx(view.context, 16)
 
@@ -46,23 +48,49 @@ class Sample3 : Activity() {
             itemText = view.findViewById(R.id.payloadText)
             itemText.setTextSize(COMPLEX_UNIT_PX, smallTextSize)
 
-            val animator1 = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
+            val animatorSize = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
                 addUpdateListener {
                     itemText.setTextSize(COMPLEX_UNIT_PX, animatedValue as Float)
                 }
                 interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
             }
-            val animator2 = ValueAnimator.ofFloat(0f, 359f).apply {
+            val animatorAppear = ValueAnimator.ofFloat(0f, 360f).apply {
                 addUpdateListener {
-                    if (itemText.text.contains("6")){
-                        Log.d("rotation", "${animatedValue as Float}")
-                    }
                     itemText.rotation = animatedValue as Float
                 }
             }
             applyAnimations(mapOf(
-                0 to animator1,
-                1 to animator2
+                0 to animatorSize,
+                1 to animatorAppear
+            ))
+        }
+    }
+
+    //3th ViewHolder - Animate size & Alpha
+    class ItemViewHolder4(view: View) : EasyScrollViewHolder<Int>(view) {
+        private val bigTextSize = dpToPx(view.context, 24)
+        private val smallTextSize = dpToPx(view.context, 16)
+
+        val itemText: TextView
+
+        init {
+            itemText = view.findViewById(R.id.payloadText)
+            itemText.setTextSize(COMPLEX_UNIT_PX, smallTextSize)
+
+            val animatorSize = ValueAnimator.ofFloat(smallTextSize, bigTextSize).apply {
+                addUpdateListener {
+                    itemText.setTextSize(COMPLEX_UNIT_PX, animatedValue as Float)
+                }
+                interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
+            }
+            val animatorAppear = ValueAnimator.ofFloat(0.4f, 1f).apply {
+                addUpdateListener {
+                    itemText.alpha = animatedValue as Float
+                }
+            }
+            applyAnimations(mapOf(
+                0 to animatorSize,
+                1 to animatorAppear
             ))
         }
     }
@@ -70,26 +98,27 @@ class Sample3 : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initFirstEasyPicker()
-        initSecondEasyPicker()
-        initThirdEasyPicker()
+        initEasyPicker1()
+        initEasyPicker2()
+        initEasyPicker3()
+        initEasyPicker4()
 
         setContentView(binding.root)
     }
 
-    private fun initFirstEasyPicker(){
+    private fun initEasyPicker1(){
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
-        val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
+        val scrollPickerManager = EasyScrollManager<ItemViewHolder1and2, Int>(
             easyScrollPicker = binding.easyScrollPicker1,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item3, parent, false)
-                ItemViewHolder(view)
+                ItemViewHolder1and2(view)
             },
             onBindViewHolder = { holder, item ->
                 holder.itemText.text = item.toString()
             },
             onItemSelect = {
-                Log.d("Test", "Selected $it")
+                //your logic on item select
             }
         )
 
@@ -98,18 +127,18 @@ class Sample3 : Activity() {
         scrollPickerManager.setInitialPosition(1)
     }
 
-    private fun initSecondEasyPicker(){
-        val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
+    private fun initEasyPicker2(){
+        val scrollPickerManager = EasyScrollManager<ItemViewHolder1and2, Int>(
             easyScrollPicker = binding.easyScrollPicker2,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item3, parent, false)
-                ItemViewHolder(view)
+                ItemViewHolder1and2(view)
             },
             onBindViewHolder = { holder, item ->
                 holder.itemText.text = item.toString()
             },
             onItemSelect = {
-                Log.d("Test", "Selected $it")
+                //your logic on item select
             }
         )
 
@@ -118,18 +147,38 @@ class Sample3 : Activity() {
         scrollPickerManager.setInitialPosition(2)
     }
 
-    private fun initThirdEasyPicker(){
-        val scrollPickerManager = EasyScrollManager<ItemViewHolder2, Int>(
+    private fun initEasyPicker3(){
+        val scrollPickerManager = EasyScrollManager<ItemViewHolder3, Int>(
             easyScrollPicker = binding.easyScrollPicker3,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item3, parent, false)
-                ItemViewHolder2(view)
+                ItemViewHolder3(view)
             },
             onBindViewHolder = { holder, item ->
                 holder.itemText.text = item.toString()
             },
             onItemSelect = {
-                Log.d("Test", "Selected $it")
+                //your logic on item select
+            }
+        )
+
+        val dataset = (1..100).toList()
+        scrollPickerManager.setItems(dataset)
+        scrollPickerManager.setInitialPosition(2)
+    }
+
+    private fun initEasyPicker4(){
+        val scrollPickerManager = EasyScrollManager<ItemViewHolder4, Int>(
+            easyScrollPicker = binding.easyScrollPicker4,
+            onCreateViewHolder = { parent ->
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item3, parent, false)
+                ItemViewHolder4(view)
+            },
+            onBindViewHolder = { holder, item ->
+                holder.itemText.text = item.toString()
+            },
+            onItemSelect = {
+                //your logic on item select
             }
         )
 

@@ -24,9 +24,6 @@ class Sample2 : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //wrong
-        //binding.easyScrollPicker.adapter = Sample1Adapter()
-        //--- TODO TEST IN FRAGMENT ---
         // in generic pass <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,

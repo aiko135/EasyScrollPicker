@@ -38,7 +38,7 @@
             tools:listitem="@layout/sample_item"/>
 
         <TextView
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,11 +58,11 @@
             tools:listitem="@layout/sample_item"/>
 
         <TextView
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="two animations depending on index"
+            android:text="size [0] and rotate [1] animation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/selected"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,6 +70,26 @@
         <ktepin.android.easyscrollpicker.EasyScrollPicker
             android:layout_marginTop="10dp"
             android:id="@+id/easyScrollPicker3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemsOnScreen="5"
+            app:enableSnapFinisher="true"
+            app:selectDelayMs="400"
+            tools:listitem="@layout/sample_item"/>
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="size [0] and appear [1] animation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ktepin.android.easyscrollpicker.EasyScrollPicker
+            android:layout_marginTop="10dp"
+            android:id="@+id/easyScrollPicker4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemsOnScreen="5"
