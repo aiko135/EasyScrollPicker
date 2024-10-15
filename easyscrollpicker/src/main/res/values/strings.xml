@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="easy_scroll_wrong_adapter">For Easy Scroll Picker, please inherit from its own adapter, called EasyScrollAdapter</string>
-</resources>

@@ -15,6 +15,12 @@ class MainActivity : AppCompatActivity() {
         binding.btnSample1.setOnClickListener {
             startActivity(Intent(this, Sample1::class.java))
         }
+        binding.btnSample2.setOnClickListener {
+            startActivity(Intent(this, Sample2::class.java))
+        }
+        binding.btnSample3.setOnClickListener {
+            startActivity(Intent(this, Sample3::class.java))
+        }
         setContentView(binding.root)
     }
 

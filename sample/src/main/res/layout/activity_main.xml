@@ -19,19 +19,19 @@
             android:id="@+id/btnSample1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #1"/>
+            android:text="Sample #1 - Skeletal demo"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSample2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #2"/>
+            android:text="Sample #2 - Design with gradient"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSample3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #3"/>
+            android:text="Sample #3 - Animated"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
