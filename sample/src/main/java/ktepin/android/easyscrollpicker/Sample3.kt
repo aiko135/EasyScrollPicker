@@ -65,16 +65,6 @@ class Sample3 : Activity() {
                 1 to animator2
             ))
         }
-
-        override fun decorateViewAtPos(relativePos: Int, item: Int) {
-//            animations.forEach {
-//                it.value.setCurrentFraction(0.0f)
-//            }
-            if (itemText.text.contains("6")){
-                Log.d("rotation", "6th item became $relativePos")
-            }
-            itemText.rotation = 0.0f
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
