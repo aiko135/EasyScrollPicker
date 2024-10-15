@@ -1,12 +1,8 @@
 package ktepin.android.easyscrollpicker
 
-import android.animation.ValueAnimator
 import android.content.Context
-import android.renderscript.Sampler.Value
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +10,6 @@ import androidx.recyclerview.widget.SnapHelper
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
 import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
-import kotlin.math.abs
 
 class EasyScrollPicker : RecyclerView {
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
@@ -104,19 +99,8 @@ class EasyScrollPicker : RecyclerView {
     internal fun <VH : EasyScrollViewHolder<I>, I> onItemChangeRelativePos(view: View, relativePos: Int){
         adapter?.getItemAtPos(getChildAdapterPosition(view))?.let { payloadItem ->
             val vh = getChildViewHolder(view) as VH
-            ensureAnimsFinished(vh.animations, relativePos)  //force finish animation
             payloadItem as I
             vh.decorateViewAtPos(relativePos, payloadItem)
-        }
-    }
-
-    private fun ensureAnimsFinished(anims:Map<Int, ValueAnimator>, currentRelativePos: Int){
-        val finishedAnimIndex = abs(currentRelativePos)
-        anims.forEach { (animIndex, animator) ->
-            if (animIndex >= finishedAnimIndex)
-                animator.setCurrentFraction(1.0f)
-            else
-                animator.setCurrentFraction(0.0f)
         }
     }
 

@@ -1,6 +1,6 @@
 package ktepin.android.easyscrollpicker
 
-import android.animation.ValueAnimator
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +23,6 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
     reverseLayout: Boolean,
     private val selectDelay: Long,
     private val onItemSelect: ((item: I) -> Unit)?,
-    private val skipAnimationsHeartbeat: Boolean = false
 ) : LinearLayoutManager(easyScrollPicker.context, orientation, reverseLayout) {
     private var prevCentralView: View? = null
     private var waitJob: Job? = null
@@ -70,13 +69,12 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
                         notifyRelativePosChange(child, i, childCount)
                         prevCentralView = child
                     }
-
-                    if (skipAnimationsHeartbeat)
-                        i = childCount + 1 //BREAK CYCLE while (i < childCount) // classic break can be problem in lambdas
                 }
 
-                calculateAnim(easyScrollPicker.getChildViewHolder(child)!! as VH, distToCenter.toInt(), elemWidth)
+                //make animation step
+                animate(easyScrollPicker.getChildViewHolder(child)!! as VH, distToCenter, elemWidth)
             }
+
             i++
         }
     }
@@ -136,14 +134,24 @@ class EasyScrollLayoutManager<VH:EasyScrollViewHolder<I>, I>(
 
     }
 
-    private fun calculateAnim(vh: VH, distToCenter: Int, elemWidth: Int){
-        val closerToCenterPosAbs = distToCenter / elemWidth
+    private fun animate(vh: VH, distToCenter: Float, elemWidth: Int){
+        val closerToCenterPosAbs = distToCenter.toInt() / elemWidth
 
-        vh.animations[closerToCenterPosAbs]?.let {
-            val mod = distToCenter % elemWidth
-            var relativeFraction = mod.toFloat() / elemWidth.toFloat()
-            relativeFraction = 1.0f - relativeFraction
-            it.setCurrentFraction(relativeFraction)
+        vh.animations.forEach { (animIndex, animator) ->
+            if (animIndex == closerToCenterPosAbs){
+                val mod = distToCenter % elemWidth
+                var relativeFraction = mod / elemWidth
+                relativeFraction = 1.0f - relativeFraction
+                if (closerToCenterPosAbs == 1){
+                    Log.d("test","Fraction $relativeFraction")
+                }
+                animator.setCurrentFraction(relativeFraction)
+            }else{
+                if (animIndex > closerToCenterPosAbs)
+                    animator.setCurrentFraction(1.0f)
+                else
+                    animator.setCurrentFraction(0.0f)
+            }
         }
     }
 }
