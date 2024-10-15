@@ -83,7 +83,7 @@ class Sample3 : Activity() {
                 }
                 interpolator = AccelerateInterpolator(1.5f) //Configure some interpolator
             }
-            val animatorAppear = ValueAnimator.ofFloat(0.4f, 1f).apply {
+            val animatorAppear = ValueAnimator.ofFloat(0.2f, 1f).apply {
                 addUpdateListener {
                     itemText.alpha = animatedValue as Float
                 }
