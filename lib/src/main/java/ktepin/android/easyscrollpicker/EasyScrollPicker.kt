@@ -3,18 +3,21 @@ package ktepin.android.easyscrollpicker
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.BaseAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import ktepin.android.easyscrollpicker.adapter.AbstractAdapter
+import ktepin.android.easyscrollpicker.adapter.HorizontalAdapter
+import ktepin.android.easyscrollpicker.adapter.VerticalAdapter
 import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
 import ktepin.android.easyscrollpicker.exception.WrongAdapterException
 import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
 
 class EasyScrollPicker : RecyclerView {
+    private var oreientation = DEFAULT_ORIENTATION
     private var numOfItemsOnScreen = DEFAULT_ITEMS_ON_SCREEN
-    private var requiredElemWidth = 0
     internal var initialPos = DEFAULT_INIT_POS
     private var selectDelay = DEFAULT_SELECT_DELAY_MS
     private var snapHelper: SnapHelper? = null
@@ -60,19 +63,28 @@ class EasyScrollPicker : RecyclerView {
         if (speedFactor > 0.0f)
             scrollSpeedFactor = speedFactor
 
-        val orientation = attrs.getInt(R.styleable.EasyScrollPicker_easyOrientation, DEFAULT_ORIENTATION)
+        val orient = attrs.getInt(R.styleable.EasyScrollPicker_orientationMode, DEFAULT_ORIENTATION)
+        oreientation = if(orient == 1)
+            LinearLayoutManager.VERTICAL
+        else
+            LinearLayoutManager.HORIZONTAL
+
+        val initialPos = attrs.getInt(R.styleable.EasyScrollPicker_initialPosition, DEFAULT_INIT_POS)
+        if (initialPos > 0)
+            this.initialPos = initialPos
+
         attrs.recycle()
     }
 
     override fun setAdapter(adapter: Adapter<*>?) {
-        if (adapter is EasyScrollAdapter<*, *>) {
+        if (adapter is AbstractAdapter<*, *>) {
             super.setAdapter(adapter)
         } else {
             throw WrongAdapterException(context)
         }
     }
 
-    override fun getAdapter(): EasyScrollAdapter<*, *>? = super.getAdapter() as EasyScrollAdapter<*, *>?
+    override fun getAdapter(): AbstractAdapter<*, *>? = super.getAdapter() as AbstractAdapter<*, *>?
 
     override fun setLayoutManager(lm: LayoutManager?) {
         if (lm is EasyScrollLayoutManager<*, *>) {
@@ -85,13 +97,14 @@ class EasyScrollPicker : RecyclerView {
     internal fun <VH : EasyScrollViewHolder<I>, I> configure(
         callbacks: EasyScrollCallbacks<VH, I>,
     ) {
-        adapter = EasyScrollAdapter(
-            callbacks.onCreateViewHolder,
-            callbacks.onBindViewHolder
-        )
+        adapter = if (oreientation == LinearLayoutManager.VERTICAL)
+            VerticalAdapter(callbacks.onBindViewHolder, callbacks.onCreateViewHolder)
+        else
+            HorizontalAdapter(callbacks.onBindViewHolder, callbacks.onCreateViewHolder)
+
         layoutManager = EasyScrollLayoutManager<VH, I>(
             easyScrollPicker = this,
-            orientation = DEFAULT_ORIENTATION,
+            orientation = oreientation,
             reverseLayout = DEFAULT_REVERSE_LAYOUT,
             onItemSelect = callbacks.onItemSelect,
             selectDelay = selectDelay.toLong()
@@ -109,14 +122,17 @@ class EasyScrollPicker : RecyclerView {
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
 
-        requiredElemWidth = measuredWidth / numOfItemsOnScreen
-
-        adapter?.let {
-            it.elemWidthPx = requiredElemWidth
+        if(oreientation == LinearLayoutManager.VERTICAL){
+            val requiredElemHeight = measuredHeight/ numOfItemsOnScreen
+            adapter?.applyElemSize(requiredElemHeight)
+            val clipPadding: Int = measuredHeight / 2 - (requiredElemHeight / 2)
+            setPadding(0, clipPadding, 0, clipPadding)
+        }else{
+            val requiredElemWidth = measuredWidth / numOfItemsOnScreen
+            adapter?.applyElemSize(requiredElemWidth)
+            val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
+            setPadding(clipPadding, 0, clipPadding, 0)
         }
-
-        val clipPadding: Int = measuredWidth / 2 - (requiredElemWidth / 2)
-        setPadding(clipPadding, 0, clipPadding, 0)
     }
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {

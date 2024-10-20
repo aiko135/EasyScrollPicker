@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,10 +28,11 @@
 
         <ktepin.android.easyscrollpicker.EasyScrollPicker
             android:id="@+id/easyScrollPicker"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:itemsOnScreen="5"
-            app:easyOrientation="vertical"
+            app:itemsOnScreen="7"
+            app:initialPosition="3"
+            app:orientationMode="vertical"
             app:enableSnapFinisher="true"
             app:selectDelayMs="400"/>
 

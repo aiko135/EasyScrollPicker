@@ -2,11 +2,12 @@
 <resources>
     <declare-styleable name="EasyScrollPicker">
         <attr name="itemsOnScreen" format="integer"/>
+        <attr name="initialPosition" format="integer"/>
         <attr name="selectDelayMs" format="integer"/>
         <attr name="enableSnapFinisher" format="boolean"/>
         <attr name="scrollSpeedFactor" format="float"/>
 
-        <attr name="easyOrientation" format="enum">
+        <attr name="orientationMode" format="enum">
             <enum name="vertical" value="1"/>
             <enum name="horizontal" value="0"/>
         </attr>
