@@ -3,6 +3,7 @@ package ktepin.android.easyscrollpicker
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,7 @@ class EasyScrollPicker : RecyclerView {
         if (speedFactor > 0.0f)
             scrollSpeedFactor = speedFactor
 
+        val orientation = attrs.getInt(R.styleable.EasyScrollPicker_easyOrientation, DEFAULT_ORIENTATION)
         attrs.recycle()
     }
 

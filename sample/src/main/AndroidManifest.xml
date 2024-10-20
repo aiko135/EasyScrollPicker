@@ -30,6 +30,9 @@
         <activity
             android:name=".Sample3">
         </activity>
+        <activity
+            android:name=".Sample4">
+        </activity>
     </application>
 
 </manifest>

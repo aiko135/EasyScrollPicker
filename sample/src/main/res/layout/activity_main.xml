@@ -32,6 +32,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sample #3 - Animated"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSample4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sample #4 - Vertical"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
