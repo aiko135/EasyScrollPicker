@@ -29,7 +29,7 @@ class Sample1 : Activity() {
 
         // use in generic <YOUR_CUSTOM_VIEW_HOLDER, PAYLOAD_TYPE>
         val pickerManager = EasyScrollManager<ItemViewHolder, Int>(
-            easyScrollPicker = binding.easyScrollPicker,
+            easyScrollPicker = binding.firstScrollPicker,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
                 ItemViewHolder(view)
@@ -48,7 +48,7 @@ class Sample1 : Activity() {
 
 
         val pickerManager2 = EasyScrollManager<ItemViewHolder, Int>(
-            easyScrollPicker = binding.easyScrollPicker2,
+            easyScrollPicker = binding.secondScrollPicker,
             onCreateViewHolder = { parent ->
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
                 ItemViewHolder(view)
@@ -60,11 +60,8 @@ class Sample1 : Activity() {
                 binding.selected2.text = it.toString()
             }
         )
+        pickerManager2.setItems(dataset)
         pickerManager2.setInitialPosition(4)
-        binding.root.postDelayed(1000){
-            pickerManager2.setItems(dataset)
-        }
-
 
         setContentView(binding.root)
     }

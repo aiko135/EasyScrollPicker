@@ -18,15 +18,25 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <ImageView
+        <TextView
             android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:text="itemsOnScreen = 3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:rotation="180"
             android:src="@drawable/ic_arrow1"/>
 
          <ktepin.android.easyscrollpicker.EasyScrollPicker
-             android:id="@+id/easyScrollPicker"
+             android:id="@+id/firstScrollPicker"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              app:itemsOnScreen="3"
@@ -57,18 +67,29 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
+        <TextView
+            android:paddingStart="5dp"
             android:layout_marginTop="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="itemsOnScreen = 5\ninitialPosition = 2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selected"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:rotation="180"
             android:src="@drawable/ic_arrow1"/>
 
         <ktepin.android.easyscrollpicker.EasyScrollPicker
-            android:id="@+id/easyScrollPicker2"
+            android:id="@+id/secondScrollPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemsOnScreen="5"
+            app:initialPosition="2"
             app:enableSnapFinisher="true"
             app:selectDelayMs="400"/>
 
