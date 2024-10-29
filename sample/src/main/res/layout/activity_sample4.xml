@@ -31,7 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:itemsOnScreen="7"
-            app:initialPosition="3"
             app:orientationMode="vertical"
             app:enableSnapFinisher="true"
             app:selectDelayMs="400"/>
