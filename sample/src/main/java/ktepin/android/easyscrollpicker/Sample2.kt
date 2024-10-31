@@ -17,7 +17,7 @@ class Sample2 : Activity() {
         val text: TextView
 
         init {
-            text = view.findViewById(R.id.payloadText)
+            text = view.findViewById(R.id.text)
         }
     }
 
@@ -28,28 +28,20 @@ class Sample2 : Activity() {
         val scrollPickerManager = EasyScrollManager<ItemViewHolder, Int>(
             easyScrollPicker = binding.easyScrollPicker,
             onCreateViewHolder = { parent ->
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.sample_item2, parent, false)
                 ItemViewHolder(view)
             },
             onBindViewHolder = { holder, item ->
-                holder.text.text = item.toString()
+                holder.text.text = "$${item}";
             },
             onItemSelect = {
                 Log.d("Test", "Selected $it")
             }
         )
 
-        val dataset = (1..100).toList()
-        scrollPickerManager.setInitialPosition(0)
+        val dataset = listOf(1, 5, 10 ,12, 15, 20, 25, 30, 50, 75, 100, 120, 150)
+        scrollPickerManager.setInitialPosition(2)
         scrollPickerManager.setItems(dataset)
-
-//        GlobalScope.launch {
-//            delay(5000)
-//            runOnUiThread {
-//                scrollPickerManager.setInitialPosition(4)
-//                scrollPickerManager.setItems(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 ,15, 16, 17))
-//            }
-//        }
 
         setContentView(binding.root)
     }
