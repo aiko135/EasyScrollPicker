@@ -25,7 +25,7 @@
             android:id="@+id/btnSample2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample #2 - Design with gradient"/>
+            android:text="Sample #2 - Design example"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSample3"

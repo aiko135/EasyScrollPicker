@@ -7,18 +7,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:paddingVertical="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity= "center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <TextView
+            android:textColor="@color/primary"
             android:id="@+id/text"
-            android:textSize="16dp"
+            android:textSize="24dp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"/>
+
+        <ImageView
+            android:id="@+id/dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dot"
+            android:layout_marginTop="4dp"/>
 
     </LinearLayout>
 
