@@ -1,11 +1,12 @@
 package ktepin.android.easyscrollpicker
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import ktepin.android.easyscrollpicker.databinding.ActivitySample2Binding
@@ -19,19 +20,23 @@ class Sample2 : Activity() {
     class ItemViewHolder(view: View) : EasyScrollViewHolder<Int>(view) {
         val text: TextView = view.findViewById(R.id.text)
         val dot: ImageView = view.findViewById(R.id.dot)
+        val stroke: FrameLayout = view.findViewById(R.id.stroke)
 
         override fun decorateViewAtPos(relativePos: Int, item: Int) {
-           when(abs(relativePos)){
-               0 -> applyColor(R.color.primary)
-               1 -> applyColor(R.color.gray1)
-               else -> applyColor(R.color.gray2)
+           when(relativePos){
+               0 ->  applyViewParams(R.color.primary, R.drawable.ic_dot, R.drawable.gradient_center)
+               1 ->  applyViewParams(R.color.gray1, R.drawable.ic_dot_white, R.drawable.gradient_right)
+               -1 -> applyViewParams(R.color.gray1, R.drawable.ic_dot_white, R.drawable.gradient_left)
+               else ->  applyViewParams(R.color.gray2, R.drawable.ic_dot_gray, R.drawable.gradient_no)
            }
         }
 
-        private fun applyColor(colorId: Int){
+        @SuppressLint("UseCompatLoadingForDrawables")
+        private fun applyViewParams(colorId: Int, dotDrawable: Int, strokeDrawable: Int){
             text.context?.let {
                 text.setTextColor(it.getColor(colorId))
-                dot.setBackgroundColor(colorId)
+                dot.setImageDrawable(it.getDrawable(dotDrawable))
+                stroke.background = it.getDrawable(strokeDrawable)
             }
         }
     }
