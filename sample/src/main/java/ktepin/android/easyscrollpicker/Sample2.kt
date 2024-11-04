@@ -55,7 +55,7 @@ class Sample2 : Activity() {
                 holder.text.text = "$${item}";
             },
             onItemSelect = {
-                Log.d("Test", "Selected $it")
+                binding.selected.text  = "Selected $$it"
             }
         )
 
