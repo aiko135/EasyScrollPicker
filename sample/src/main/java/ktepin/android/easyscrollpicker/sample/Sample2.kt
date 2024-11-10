@@ -1,16 +1,17 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.sample
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import ktepin.android.easyscrollpicker.databinding.ActivitySample2Binding
-import kotlin.math.abs
+import ktepin.android.easyscrollpicker.lib.EasyScrollManager
+import ktepin.android.easyscrollpicker.lib.EasyScrollViewHolder
+import ktepin.android.easyscrollpicker.sample.databinding.ActivitySample2Binding
+
 
 class Sample2 : Activity() {
     private val binding: ActivitySample2Binding by lazy {

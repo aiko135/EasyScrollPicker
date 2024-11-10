@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.lib
 
 import android.util.Log
 import android.view.View
@@ -10,7 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ktepin.android.easyscrollpicker.adapter.AbstractAdapter
+import ktepin.android.easyscrollpicker.lib.adapter.AbstractAdapter
 import kotlin.math.abs
 
 

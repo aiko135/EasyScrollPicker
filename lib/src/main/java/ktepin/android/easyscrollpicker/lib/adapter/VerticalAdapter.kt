@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker.adapter
+package ktepin.android.easyscrollpicker.lib.adapter
 
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams

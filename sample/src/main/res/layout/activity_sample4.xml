@@ -26,7 +26,7 @@
 <!--            android:rotation="180"-->
 <!--            android:src="@drawable/ic_arrow1"/>-->
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:id="@+id/easyScrollPicker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker.exception
+package ktepin.android.easyscrollpicker.lib.exception
 
 import android.content.Context
 

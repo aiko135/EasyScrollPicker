@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.sample
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.core.view.postDelayed
-import ktepin.android.easyscrollpicker.databinding.ActivitySample1Binding
+import ktepin.android.easyscrollpicker.lib.EasyScrollManager
+import ktepin.android.easyscrollpicker.lib.EasyScrollViewHolder
+import ktepin.android.easyscrollpicker.sample.databinding.ActivitySample1Binding
+
 
 class Sample1 : Activity() {
     private val binding: ActivitySample1Binding by lazy {

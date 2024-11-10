@@ -35,7 +35,7 @@
             android:rotation="180"
             android:src="@drawable/ic_arrow1"/>
 
-         <ktepin.android.easyscrollpicker.EasyScrollPicker
+         <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
              android:id="@+id/firstScrollPicker"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             android:rotation="180"
             android:src="@drawable/ic_arrow1"/>
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:id="@+id/secondScrollPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,15 +1,16 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.sample
 
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
-import ktepin.android.easyscrollpicker.databinding.ActivitySample3Binding
+import ktepin.android.easyscrollpicker.lib.EasyScrollManager
+import ktepin.android.easyscrollpicker.lib.EasyScrollViewHolder
+import ktepin.android.easyscrollpicker.sample.databinding.ActivitySample3Binding
 
 class Sample3 : Activity() {
     private val binding: ActivitySample3Binding by lazy {

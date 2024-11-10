@@ -1,9 +1,9 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.sample
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ktepin.android.easyscrollpicker.databinding.ActivityMainBinding
+import ktepin.android.easyscrollpicker.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {

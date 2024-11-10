@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ktepin.android.easyscrollpicker"
+    namespace = "ktepin.android.easyscrollpicker.lib"
     compileSdk = 34
 
     defaultConfig {

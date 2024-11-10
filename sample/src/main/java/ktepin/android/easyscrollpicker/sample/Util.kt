@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.sample
 
 import android.content.Context
 import android.util.TypedValue

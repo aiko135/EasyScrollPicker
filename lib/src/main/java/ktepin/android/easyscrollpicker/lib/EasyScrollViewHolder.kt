@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.lib
 
 import android.animation.ValueAnimator
 import android.view.View

@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toStartOf="@+id/selected"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:layout_marginTop="10dp"
             android:id="@+id/easyScrollPicker1"
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toStartOf="@+id/selected"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:layout_marginTop="10dp"
             android:id="@+id/easyScrollPicker2"
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             app:layout_constraintEnd_toStartOf="@+id/selected"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:layout_marginTop="10dp"
             android:id="@+id/easyScrollPicker3"
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             app:layout_constraintEnd_toStartOf="@+id/selected"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ktepin.android.easyscrollpicker.EasyScrollPicker
+        <ktepin.android.easyscrollpicker.lib.EasyScrollPicker
             android:layout_marginTop="10dp"
             android:id="@+id/easyScrollPicker4"
             android:layout_width="match_parent"

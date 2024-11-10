@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.lib
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package ktepin.android.easyscrollpicker
+package ktepin.android.easyscrollpicker.lib
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import ktepin.android.easyscrollpicker.adapter.AbstractAdapter
-import ktepin.android.easyscrollpicker.adapter.HorizontalAdapter
-import ktepin.android.easyscrollpicker.adapter.VerticalAdapter
-import ktepin.android.easyscrollpicker.exception.ItemsOnScreenEvenException
-import ktepin.android.easyscrollpicker.exception.WrongAdapterException
-import ktepin.android.easyscrollpicker.exception.WrongLayoutManagerException
+import ktepin.android.easyscrollpicker.lib.adapter.AbstractAdapter
+import ktepin.android.easyscrollpicker.lib.adapter.HorizontalAdapter
+import ktepin.android.easyscrollpicker.lib.adapter.VerticalAdapter
+import ktepin.android.easyscrollpicker.lib.exception.ItemsOnScreenEvenException
+import ktepin.android.easyscrollpicker.lib.exception.WrongAdapterException
+import ktepin.android.easyscrollpicker.lib.exception.WrongLayoutManagerException
 
 class EasyScrollPicker : RecyclerView {
     private var oreientation = DEFAULT_ORIENTATION
