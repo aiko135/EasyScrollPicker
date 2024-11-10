@@ -52,31 +52,30 @@ abstract class AEasyScrollPicker : RecyclerView {
         if (itemsOnScreen % 2 == 0)
             throw ItemsOnScreenEvenException(context)
 
-        if (isInEditMode){
-//            elementsToDraw.clear()
-//
-//            val spacingsOnScreen = itemsOnScreen - 1
-//            val elemSize = if (orientation == LinearLayoutManager.HORIZONTAL){
-//                (width - (spacingsOnScreen * PREVIEW_ELEMENTS_SPACING_PX)) / itemsOnScreen
-//            }else{
-//                (height - (spacingsOnScreen * PREVIEW_ELEMENTS_SPACING_PX)) / itemsOnScreen
-//            }
-//
-//            var offset = if (orientation == LinearLayoutManager.HORIZONTAL) left else top
-//            for (i in 1..itemsOnScreen){
-//                if (i > 1){
-//                    offset += PREVIEW_ELEMENTS_SPACING_PX
-//                }
-//
-//                val rect = if (orientation == LinearLayoutManager.HORIZONTAL){
-//                    Rect(offset, top, offset + elemSize, bottom)
-//                }else{
-//                    Rect(left, offset, right, offset + elemSize)
-//                }
-//                elementsToDraw.add(rect)
-//                offset += elemSize
-//            }
-            elementsToDraw.add(Rect(0, 0, width, height))
+        if (isInEditMode && changed){
+            elementsToDraw.clear()
+
+            val spacingsOnScreen = itemsOnScreen - 1
+            val elemSize = if (orientation == LinearLayoutManager.HORIZONTAL){
+                (width - (spacingsOnScreen * PREVIEW_ELEMENTS_SPACING_PX)) / itemsOnScreen
+            }else{
+                (height - (spacingsOnScreen * PREVIEW_ELEMENTS_SPACING_PX)) / itemsOnScreen
+            }
+
+            var offset = 0
+            for (i in 1..itemsOnScreen){
+                if (i > 1){
+                    offset += PREVIEW_ELEMENTS_SPACING_PX
+                }
+
+                val rect = if (orientation == LinearLayoutManager.HORIZONTAL){
+                    Rect(offset, 0, offset + elemSize, height)
+                }else{
+                    Rect(0, offset, width, offset + elemSize)
+                }
+                elementsToDraw.add(rect)
+                offset += elemSize
+            }
             elementsToDraw.add(Rect(left, top, right, bottom))
         }
     }
