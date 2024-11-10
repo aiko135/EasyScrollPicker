@@ -76,7 +76,6 @@ abstract class AEasyScrollPicker : RecyclerView {
                 elementsToDraw.add(rect)
                 offset += elemSize
             }
-            elementsToDraw.add(Rect(left, top, right, bottom))
         }
     }
 
